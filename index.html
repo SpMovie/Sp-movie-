@@ -205,9 +205,16 @@ async function verifyAdmin(uid,showMessage=true){
  }catch(e){toast("Admin verification failed: "+e.message)}
 }
 async function login(){
- if(!isFirebaseReady){toast("Add Firebase configuration first. Preview mode has no real admin login.");return}
  const email=$("adminEmail").value.trim(),password=$("adminPassword").value;
  if(!email||!password){toast("Enter email and password.");return}
+ // TEST-ONLY DEMO LOGIN: remove this block before public production use.
+ // It opens the admin interface for visual testing only; it does not grant Firebase/database permissions.
+ if(!isFirebaseReady && email==="test@spmovies.demo" && password==="SPTest@123"){
+  currentUser={uid:"local-test-admin",email};
+  close("authOverlay");open("adminOverlay");renderAdminList();
+  toast("Test login successful. Firebase is still required to save real movies.");return;
+ }
+ if(!isFirebaseReady){toast("Invalid test login, or add Firebase configuration for real admin login.");return}
  try{const cred=await signInWithEmailAndPassword(auth,email,password);currentUser=cred.user;close("authOverlay");await verifyAdmin(cred.user.uid,true)}
  catch(e){toast("Login failed: "+e.message)}
 }
