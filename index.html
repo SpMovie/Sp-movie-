@@ -293,7 +293,10 @@ function normalizeMovie(row){
   title:row.title||"",
   poster:row.poster_url||row.poster||"",
   embed:row.embed_url||row.embed||"",
-  published:row.published===true||row.published===1||row.published==="1",
+  /* Public /api/movies may omit published because it returns only published rows. */
+  published:row.published==null
+   ? true
+   : (row.published===true||row.published===1||row.published==="1"),
   date:formatDate(row.release_date||row.created_at||"")
  };
 }
