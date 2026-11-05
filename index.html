@@ -61,7 +61,7 @@ main{width:min(1320px,92vw);margin:auto}.hero{margin:28px 0 34px;min-height:340p
 <section class="watch-page" id="watchPage">
  <div class="watch-top"><button class="back-home" id="backHome">← Back to Movies</button><span class="eyebrow">SP MOVIES · NOW PLAYING</span></div>
  <h1 id="watchTitle">Loading movie…</h1>
- <div class="watch-player"><iframe id="watchFrame" src="about:blank" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" title="Movie player"></iframe></div>
+ <div class="watch-player"><video id="watchVideo" controls playsinline preload="metadata" style="width:100%;height:100%;display:block;background:#000"></video></div>
  <div class="watch-info"><h2 id="watchInfoTitle"></h2><p>Playback is provided by the linked video host. If it does not load, the host may not allow embedded playback in this page.</p></div>
 </section>
 <footer class="footer">SP MOVIES · Stream content you are authorized to access and distribute.</footer>
@@ -71,31 +71,19 @@ main{width:min(1320px,92vw);margin:auto}.hero{margin:28px 0 34px;min-height:340p
     <div class="modalhead"><div class="logo">SP <b>MOVIES</b></div><button class="close" id="closeDrawer">✕</button></div>
     <p class="note">Quick access</p>
     <button id="drawerHome">⌂ &nbsp; Home</button>
-    <button id="drawerAdmin">🔐 &nbsp; Admin Panel Login</button>
-    <p class="note" style="margin-top:28px">Admin access is restricted to accounts enabled in your Firebase database.</p>
+    <button id="drawerAdmin">⚙ &nbsp; Open Admin Panel</button>
+    <p class="note" style="margin-top:28px">Admin panel is open for local testing. Movies and files are saved in this browser only.</p>
   </aside>
-</div>
-
-<div class="overlay" id="authOverlay">
- <div class="modal">
-  <div class="modalhead"><h2>Admin Login</h2><button class="close" data-close="authOverlay">✕</button></div>
-  <div class="field"><label>Admin email</label><input id="adminEmail" type="email" placeholder="admin@example.com" autocomplete="username"></div>
-  <div class="field"><label>Password</label><input id="adminPassword" type="password" placeholder="Enter password" autocomplete="current-password"></div>
-  <p class="note">Only Firebase Authentication accounts with <code>admins/UID/enabled = true</code> can access the admin panel.</p>
-  <div class="modal-actions"><button class="secondary" data-close="authOverlay">Cancel</button><button class="primary" id="loginBtn">Login</button></div>
- </div>
 </div>
 
 <div class="overlay" id="adminOverlay">
  <div class="modal">
-  <div class="modalhead"><h2>Movie Manager</h2><button class="close" data-close="adminOverlay">✕</button></div>
-  <div class="row">
-   <div class="field"><label>Movie title</label><input id="movieTitle" placeholder="Enter movie title"></div>
-   <div class="field"><label>Visibility</label><select id="movieStatus"><option value="published">Published</option><option value="draft">Draft</option></select></div>
-  </div>
-  <div class="field"><label>Thumbnail image URL</label><input id="movieThumb" type="url" placeholder="https://example.com/poster.jpg"></div>
-  <div class="field"><label>Embed video URL</label><input id="movieEmbed" type="url" placeholder="https://video-host.example/embed/123"></div>
-  <p class="note">Use an image URL for the poster and an authorized embed URL from your video host. The video itself is streamed by that host, not uploaded to SP Movies.</p>
+  <div class="modalhead"><div><h2>Movie Manager</h2><div class="note">Open admin · No login required · Local browser storage</div></div><button class="close" data-close="adminOverlay">✕</button></div>
+  <div class="field"><label>Movie title</label><input id="movieTitle" placeholder="Enter movie title"></div>
+  <div class="field"><label>Poster / Thumbnail image (choose from phone)</label><input id="moviePosterFile" type="file" accept="image/*"></div>
+  <div class="field"><label>Video file (MP4 recommended)</label><input id="movieVideoFile" type="file" accept="video/mp4,video/webm,video/ogg,video/*"></div>
+  <div class="field"><label>Visibility</label><select id="movieStatus"><option value="published">Published</option><option value="draft">Draft</option></select></div>
+  <p class="note">Files are stored in this browser's local database (IndexedDB), not uploaded to a public server. Use MP4 for best browser compatibility. Large videos may exceed your phone/browser storage quota.</p>
   <div class="modal-actions"><button class="secondary" id="resetForm">Clear</button><button class="primary" id="saveMovie">Publish Movie</button></div>
   <hr style="border:0;border-top:1px solid var(--line);margin:24px 0">
   <h3 style="font-size:16px">Existing movies</h3>
@@ -121,150 +109,29 @@ main{width:min(1320px,92vw);margin:auto}.hero{margin:28px 0 34px;min-height:340p
 </div>
 <div class="toast" id="toast"></div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getDatabase, ref, onValue, get, push, set, update, remove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-
-const firebaseConfig = {
-  apiKey: "PASTE_YOUR_FIREBASE_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  databaseURL: "https://YOUR_DATABASE_NAME-default-rtdb.firebaseio.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
-};
-
-const DEMO_MOVIES = [
- {id:"demo1",title:"Midnight Run",thumbnail:"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=600&q=80",embedUrl:"",status:"published",demo:true},
- {id:"demo2",title:"Beyond The Horizon",thumbnail:"https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=600&q=80",embedUrl:"",status:"published",demo:true},
- {id:"demo3",title:"The Last Signal",thumbnail:"https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80",embedUrl:"",status:"published",demo:true},
- {id:"demo4",title:"Into The Wild",thumbnail:"https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=600&q=80",embedUrl:"",status:"published",demo:true}
-];
+<script>
 const $ = id => document.getElementById(id);
-let app=null,auth=null,db=null,liveMovies=[],allMovies=[],editingId=null,currentUser=null,isFirebaseReady=false,selectedMovieId=null;
-
-function toast(message){const t=$("toast");t.textContent=message;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),3200)}
-function open(id){$(id).classList.add("show")} function close(id){$(id).classList.remove("show")}
-function validHttpUrl(value){try{const u=new URL(value);return u.protocol==="https:"||u.protocol==="http:"}catch{return false}}
-function escapeHtml(s=""){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function renderMovies(){
- const q=$("search").value.trim().toLowerCase();
- const items=allMovies.filter(m=>m.status==="published"&&m.title.toLowerCase().includes(q));
- $("movieCount").textContent=`${items.length} ${items.length===1?"title":"titles"}`;
- $("movieGrid").innerHTML=items.length?items.map(m=>`
- <article class="movie" data-id="${escapeHtml(m.id)}">
-  <div class="poster">${m.thumbnail?`<img loading="lazy" src="${escapeHtml(m.thumbnail)}" alt="${escapeHtml(m.title)} poster" onerror="this.style.display='none';this.parentElement.innerHTML='<div class=&quot;fallback&quot;>▶</div>'">`:`<div class="fallback">▶</div>`}</div>
-  <div class="movie-title">${escapeHtml(m.title)}</div><div class="movie-meta">SP Movies</div>
- </article>`).join(""):`<div class="empty">No movies found. Try another search or check back later.</div>`;
- document.querySelectorAll(".movie").forEach(card=>card.addEventListener("click",()=>openMoviePreview(card.dataset.id)));
- renderWatchPage();
-}
-function openMoviePreview(id){
- const m=allMovies.find(x=>x.id===id);if(!m)return;
- if(!m.embedUrl){toast("This is a demo poster. Add an authorized embed URL in Admin Panel.");return}
- selectedMovieId=id;$("previewTitle").textContent=m.title;$("previewThumb").src=m.thumbnail||"";open("previewOverlay");
-}
-function openWatchPage(id){
- const m=allMovies.find(x=>x.id===id);if(!m||!m.embedUrl){toast("Movie is not available right now.");return}
- close("previewOverlay");history.pushState({watchId:id},"",`${location.pathname}?watch=${encodeURIComponent(id)}`);
- document.body.classList.add("watch-mode");renderWatchPage();window.scrollTo({top:0,behavior:"smooth"});
-}
-function renderWatchPage(){
- const id=new URLSearchParams(location.search).get("watch");
- if(!id){document.body.classList.remove("watch-mode");$("watchFrame").src="about:blank";return}
- const m=allMovies.find(x=>x.id===id);
- document.body.classList.add("watch-mode");
- if(!m){$("watchTitle").textContent="Loading movie…";return}
- if(m.status!=="published"||!m.embedUrl){$("watchTitle").textContent="Movie unavailable";return}
- $("watchTitle").textContent=m.title;$("watchInfoTitle").textContent=m.title;
- const frame=$("watchFrame");if(frame.dataset.movieId!==id){frame.src=m.embedUrl;frame.dataset.movieId=id;}
-}
-function returnHome(){history.pushState({},"",location.pathname);document.body.classList.remove("watch-mode");$("watchFrame").src="about:blank";$("watchFrame").dataset.movieId="";window.scrollTo({top:0,behavior:"smooth"});}
-
-function firebaseConfigured(){return firebaseConfig.apiKey!=="PASTE_YOUR_FIREBASE_API_KEY"&&firebaseConfig.projectId!=="YOUR_PROJECT_ID"}
-function showDemo(){allMovies=DEMO_MOVIES;renderMovies();$("adminMovieList").textContent="Connect Firebase to manage real movies."}
-function startFirebase(){
- if(!firebaseConfigured()){showDemo();toast("Preview mode: add your Firebase config to connect the live database.");return}
- try{
-  app=initializeApp(firebaseConfig);auth=getAuth(app);db=getDatabase(app);isFirebaseReady=true;
-  onValue(ref(db,"movies"),snap=>{
-   const data=snap.val()||{};
-   liveMovies=Object.entries(data).map(([id,v])=>({id,...v})).filter(m=>m.status==="published"||m.status==="draft");
-   allMovies=liveMovies;renderMovies();if(currentUser)renderAdminList();
-  },err=>toast("Database error: "+err.message));
-  onAuthStateChanged(auth,user=>{currentUser=user;if(user)verifyAdmin(user.uid,false)});
- }catch(e){showDemo();toast("Firebase setup issue: "+e.message)}
-}
-async function verifyAdmin(uid,showMessage=true){
- try{
-  const snap=await get(ref(db,`admins/${uid}/enabled`));
-  if(snap.val()===true){open("adminOverlay");renderAdminList();if(showMessage)toast("Admin access granted.");}
-  else{await signOut(auth);currentUser=null;if(showMessage)toast("This account is not authorized as an admin.");}
- }catch(e){toast("Admin verification failed: "+e.message)}
-}
-async function login(){
- const email=$("adminEmail").value.trim(),password=$("adminPassword").value;
- if(!email||!password){toast("Enter email and password.");return}
- // TEST-ONLY DEMO LOGIN: remove this block before public production use.
- // It opens the admin interface for visual testing only; it does not grant Firebase/database permissions.
- if(!isFirebaseReady && email==="test@spmovies.demo" && password==="SPTest@123"){
-  currentUser={uid:"local-test-admin",email};
-  close("authOverlay");open("adminOverlay");renderAdminList();
-  toast("Test login successful. Firebase is still required to save real movies.");return;
- }
- if(!isFirebaseReady){toast("Invalid test login, or add Firebase configuration for real admin login.");return}
- try{const cred=await signInWithEmailAndPassword(auth,email,password);currentUser=cred.user;close("authOverlay");await verifyAdmin(cred.user.uid,true)}
- catch(e){toast("Login failed: "+e.message)}
-}
-function resetForm(){editingId=null;$("movieTitle").value="";$("movieThumb").value="";$("movieEmbed").value="";$("movieStatus").value="published";$("saveMovie").textContent="Publish Movie"}
-async function saveMovie(){
- if(!isFirebaseReady||!currentUser){toast("Connect Firebase and sign in as admin first.");return}
- const title=$("movieTitle").value.trim(),thumbnail=$("movieThumb").value.trim(),embedUrl=$("movieEmbed").value.trim(),status=$("movieStatus").value;
- if(!title||!validHttpUrl(thumbnail)||!validHttpUrl(embedUrl)){toast("Enter a title and valid HTTP/HTTPS thumbnail and embed URLs.");return}
- const id=editingId||push(ref(db,"movies")).key;
- const old=liveMovies.find(m=>m.id===id)||{};
- const payload={title,thumbnail,embedUrl,status,createdAt:old.createdAt||Date.now(),updatedAt:Date.now()};
- try{await set(ref(db,`movies/${id}`),payload);toast("Movie saved successfully.");resetForm();renderAdminList()}
- catch(e){toast("Save failed: "+e.message)}
-}
-function renderAdminList(){
- if(!isFirebaseReady){$("adminMovieList").textContent="Firebase is not connected.";return}
- const rows=[...liveMovies];
- $("adminMovieList").innerHTML=rows.length?rows.map(m=>`
- <div style="display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--line)">
- <div style="flex:1;min-width:0"><b>${escapeHtml(m.title)}</b><div style="color:#9699aa;font-size:11px">${escapeHtml(m.status||"published")}</div></div>
- <button class="secondary editMovie" data-id="${escapeHtml(m.id)}" style="padding:8px 10px">Edit</button>
- <button class="secondary deleteMovie" data-id="${escapeHtml(m.id)}" style="padding:8px 10px;color:#ff9a9a">Delete</button></div>`).join(""):"No movies in database yet.";
- document.querySelectorAll(".editMovie").forEach(b=>b.onclick=()=>{const m=liveMovies.find(x=>x.id===b.dataset.id);if(!m)return;editingId=m.id;$("movieTitle").value=m.title||"";$("movieThumb").value=m.thumbnail||"";$("movieEmbed").value=m.embedUrl||"";$("movieStatus").value=m.status||"published";$("saveMovie").textContent="Save Changes";window.scrollTo({top:0,behavior:"smooth"})});
- document.querySelectorAll(".deleteMovie").forEach(b=>b.onclick=async()=>{if(!confirm("Delete this movie?"))return;try{await remove(ref(db,`movies/${b.dataset.id}`));toast("Movie deleted.");if(editingId===b.dataset.id)resetForm()}catch(e){toast("Delete failed: "+e.message)}});
-}
-$("search").addEventListener("input",renderMovies);
-$("menuBtn").onclick=()=>open("drawerWrap");$("closeDrawer").onclick=()=>close("drawerWrap");
-$("drawerHome").onclick=()=>{close("drawerWrap");window.scrollTo({top:0,behavior:"smooth"})};
-$("drawerAdmin").onclick=()=>{close("drawerWrap");open("authOverlay")};
-$("loginBtn").onclick=login;$("saveMovie").onclick=saveMovie;$("resetForm").onclick=resetForm;
-$("logoutBtn").onclick=async()=>{if(auth)await signOut(auth);currentUser=null;close("adminOverlay");toast("Logged out.")};
-document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",()=>close(b.dataset.close)));
-document.querySelectorAll(".overlay").forEach(o=>o.addEventListener("click",e=>{if(e.target===o){close(o.id);if(o.id==="playerOverlay")$("embedFrame").src="about:blank"}}));
-$("playerOverlay").querySelector("[data-close]").addEventListener("click",()=>$("embedFrame").src="about:blank");
-// Dynamic welcome: greeting and supporting line change with local time.
-function initWelcome(){
- const hour=new Date().getHours();
- const greeting=hour<12?"Good Morning!":hour<17?"Good Afternoon!":hour<21?"Good Evening!":"Welcome, Night Owl!";
- const lines=["Your next movie night starts here.","Fresh stories. New discoveries. One destination.","Sit back, explore, and find your next favourite."];
- $("welcomeGreeting").textContent=greeting;
- $("welcomeMessage").textContent=lines[Math.floor(Math.random()*lines.length)];
- $("welcomeClock").textContent=new Date().toLocaleDateString(undefined,{weekday:"long",day:"numeric",month:"long"});
-}
-initWelcome();
-$("enterSite").onclick=()=>$("welcomeScreen").classList.add("hide");
-$("cancelPreview").onclick=()=>close("previewOverlay");
-$("confirmPlay").onclick=()=>{if(selectedMovieId)openWatchPage(selectedMovieId)};
-$("backHome").onclick=returnHome;
-window.addEventListener("popstate",()=>{renderWatchPage()});
-startFirebase();
+let allMovies=[], editingId=null, selectedMovieId=null, dbPromise=null, objectUrls=new Map();
+const DB_NAME='SPMoviesLocalDB', DB_VERSION=1, STORE='movies';
+function toast(message){const t=$('toast');t.textContent=message;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500)}
+function open(id){$(id).classList.add('show')} function close(id){$(id).classList.remove('show')}
+function escapeHtml(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function db(){if(!('indexedDB' in window))return Promise.reject(new Error('This browser does not support local file storage.'));if(!dbPromise)dbPromise=new Promise((resolve,reject)=>{const req=indexedDB.open(DB_NAME,DB_VERSION);req.onupgradeneeded=()=>{const d=req.result;if(!d.objectStoreNames.contains(STORE))d.createObjectStore(STORE,{keyPath:'id'})};req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)});return dbPromise}
+async function dbAll(){const d=await db();return new Promise((resolve,reject)=>{const r=d.transaction(STORE).objectStore(STORE).getAll();r.onsuccess=()=>resolve(r.result||[]);r.onerror=()=>reject(r.error)})}
+async function dbPut(movie){const d=await db();return new Promise((resolve,reject)=>{const tx=d.transaction(STORE,'readwrite');tx.objectStore(STORE).put(movie);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)})}
+async function dbDelete(id){const d=await db();return new Promise((resolve,reject)=>{const tx=d.transaction(STORE,'readwrite');tx.objectStore(STORE).delete(id);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)})}
+function fileUrl(id,kind){const m=allMovies.find(x=>x.id===id);if(!m)return '';const blob=kind==='video'?m.videoBlob:m.posterBlob;if(!blob)return '';const key=id+':'+kind;if(!objectUrls.has(key))objectUrls.set(key,URL.createObjectURL(blob));return objectUrls.get(key)}
+function revokeUrls(id){for(const key of [id+':video',id+':poster'])if(objectUrls.has(key)){URL.revokeObjectURL(objectUrls.get(key));objectUrls.delete(key)}}
+function renderMovies(){const q=$('search').value.trim().toLowerCase();const items=allMovies.filter(m=>m.status==='published'&&m.title.toLowerCase().includes(q));$('movieCount').textContent=`${items.length} ${items.length===1?'title':'titles'}`;$('movieGrid').innerHTML=items.length?items.map(m=>{const poster=fileUrl(m.id,'poster');return `<article class="movie" data-id="${escapeHtml(m.id)}"><div class="poster">${poster?`<img loading="lazy" src="${poster}" alt="${escapeHtml(m.title)} poster">`:'<div class="fallback">▶</div>'}</div><div class="movie-title">${escapeHtml(m.title)}</div><div class="movie-meta">SP Movies</div></article>`}).join(''):'<div class="empty">No movies yet. Open Admin Panel to upload your first movie.</div>';document.querySelectorAll('.movie').forEach(card=>card.addEventListener('click',()=>openMoviePreview(card.dataset.id)));}
+function openMoviePreview(id){const m=allMovies.find(x=>x.id===id);if(!m)return;selectedMovieId=id;$('previewTitle').textContent=m.title;const poster=fileUrl(id,'poster');$('previewThumb').src=poster||'';$('previewThumb').style.display=poster?'block':'none';open('previewOverlay')}
+function openWatchPage(id){const m=allMovies.find(x=>x.id===id);if(!m||!m.videoBlob){toast('Video file is missing. Please edit and upload it again.');return}close('previewOverlay');history.pushState({watchId:id},'',`${location.pathname}?watch=${encodeURIComponent(id)}`);document.body.classList.add('watch-mode');$('watchTitle').textContent=m.title;$('watchInfoTitle').textContent=m.title;const v=$('watchVideo');v.pause();v.src=fileUrl(id,'video');v.load();window.scrollTo({top:0,behavior:'smooth'});}
+function returnHome(){history.pushState({},'',location.pathname);document.body.classList.remove('watch-mode');const v=$('watchVideo');v.pause();v.removeAttribute('src');v.load();window.scrollTo({top:0,behavior:'smooth'});}
+function renderAdminList(){$('adminMovieList').innerHTML=allMovies.length?allMovies.map(m=>`<div style="display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--line)"><div style="flex:1;min-width:0"><b>${escapeHtml(m.title)}</b><div style="color:#9699aa;font-size:11px">${escapeHtml(m.status)} · ${m.videoBlob?Math.round(m.videoBlob.size/1048576)+' MB':'No video'}</div></div><button class="secondary editMovie" data-id="${escapeHtml(m.id)}" style="padding:8px 10px">Edit</button><button class="secondary deleteMovie" data-id="${escapeHtml(m.id)}" style="padding:8px 10px;color:#ff9a9a">Delete</button></div>`).join(''):'No uploaded movies yet.';document.querySelectorAll('.editMovie').forEach(b=>b.onclick=()=>{const m=allMovies.find(x=>x.id===b.dataset.id);if(!m)return;editingId=m.id;$('movieTitle').value=m.title;$('movieStatus').value=m.status;$('saveMovie').textContent='Save Changes';toast('Choose new files only if you want to replace the existing files.')});document.querySelectorAll('.deleteMovie').forEach(b=>b.onclick=async()=>{if(!confirm('Delete this movie from this browser?'))return;try{await dbDelete(b.dataset.id);revokeUrls(b.dataset.id);allMovies=allMovies.filter(x=>x.id!==b.dataset.id);renderMovies();renderAdminList();toast('Movie deleted from this browser.');if(editingId===b.dataset.id)resetForm()}catch(e){toast('Delete failed: '+e.message)}})}
+function resetForm(){editingId=null;$('movieTitle').value='';$('moviePosterFile').value='';$('movieVideoFile').value='';$('movieStatus').value='published';$('saveMovie').textContent='Publish Movie'}
+async function saveMovie(){const title=$('movieTitle').value.trim(),posterFile=$('moviePosterFile').files[0],videoFile=$('movieVideoFile').files[0],status=$('movieStatus').value;if(!title){toast('Please enter a movie title.');return}if(!editingId&&(!posterFile||!videoFile)){toast('Choose both a poster image and a video file.');return}if(posterFile&&!posterFile.type.startsWith('image/')){toast('Poster must be an image file.');return}if(videoFile&&!videoFile.type.startsWith('video/')){toast('Choose a valid video file.');return}const old=allMovies.find(m=>m.id===editingId)||{};const movie={id:editingId||('m_'+Date.now()+'_'+Math.random().toString(36).slice(2,8)),title,status,posterBlob:posterFile||old.posterBlob||null,videoBlob:videoFile||old.videoBlob||null,updatedAt:Date.now(),createdAt:old.createdAt||Date.now()};try{await dbPut(movie);if(editingId)revokeUrls(editingId);const idx=allMovies.findIndex(m=>m.id===movie.id);if(idx>=0)allMovies[idx]=movie;else allMovies.unshift(movie);renderMovies();renderAdminList();resetForm();toast('Movie saved in this browser. You can play it now.')}catch(e){console.error(e);toast('Could not save. Browser storage may be full: '+(e.message||'storage error'))}}
+function initWelcome(){const h=new Date().getHours();$('welcomeGreeting').textContent=h<12?'Good Morning!':h<17?'Good Afternoon!':h<21?'Good Evening!':'Welcome, Night Owl!';const lines=['Your next movie night starts here.','Fresh stories. New discoveries. One destination.','Sit back, explore, and find your next favourite.'];$('welcomeMessage').textContent=lines[Math.floor(Math.random()*lines.length)];$('welcomeClock').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long'})}
+async function init(){initWelcome();try{allMovies=await dbAll();allMovies.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));renderMovies();renderAdminList();const id=new URLSearchParams(location.search).get('watch');if(id)openWatchPage(id)}catch(e){toast('Local storage unavailable: '+e.message);$('movieGrid').innerHTML='<div class="empty">Your browser does not support local movie storage.</div>'}}
+$('search').addEventListener('input',renderMovies);$('menuBtn').onclick=()=>$('drawerWrap').classList.add('show');$('closeDrawer').onclick=()=>$('drawerWrap').classList.remove('show');$('drawerHome').onclick=()=>{$('drawerWrap').classList.remove('show');returnHome()};$('drawerAdmin').onclick=()=>{$('drawerWrap').classList.remove('show');open('adminOverlay');renderAdminList()};$('saveMovie').onclick=saveMovie;$('resetForm').onclick=resetForm;$('logoutBtn').textContent='Close Admin Panel';$('logoutBtn').onclick=()=>close('adminOverlay');$('enterSite').onclick=()=>$('welcomeScreen').classList.add('hide');$('cancelPreview').onclick=()=>close('previewOverlay');$('confirmPlay').onclick=()=>openWatchPage(selectedMovieId);$('backHome').onclick=returnHome;document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>close(b.dataset.close)));document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)close(o.id)}));window.addEventListener('popstate',()=>{const id=new URLSearchParams(location.search).get('watch');if(id)openWatchPage(id);else returnHome()});init();
 </script>
 </body>
 </html>
