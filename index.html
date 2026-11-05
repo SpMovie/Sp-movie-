@@ -5,133 +5,775 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#090a10">
 <title>SP Movies — Stream Your World</title>
-<style>
-:root{--bg:#090a10;--panel:#131520;--panel2:#191c2a;--text:#f5f5f8;--muted:#9699aa;--accent:#a78bfa;--accent2:#7c3aed;--line:#ffffff13}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
-button,input{font:inherit}button{cursor:pointer}.topbar{height:72px;display:flex;align-items:center;gap:20px;padding:0 clamp(16px,4vw,58px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;background:#090a10ed;backdrop-filter:blur(18px)}
-.logo{font-weight:950;letter-spacing:1.2px;font-size:23px;white-space:nowrap}.logo b{color:var(--accent)}.nav{display:flex;gap:24px;margin-left:24px}.nav a{color:#c7c7d1;text-decoration:none;font-size:14px}.nav a:hover{color:white}.spacer{flex:1}.search{width:min(280px,35vw);background:#171925;border:1px solid var(--line);border-radius:999px;padding:11px 16px;color:white;outline:none}.search:focus{border-color:#a78bfa88}.iconbtn,.adminbtn{background:#1b1d2b;border:1px solid var(--line);color:white;border-radius:12px;padding:10px 13px}.adminbtn{background:linear-gradient(135deg,#8b5cf6,#6d28d9);border:0;font-weight:750}
-main{width:min(1320px,92vw);margin:auto}.hero{margin:28px 0 34px;min-height:340px;border-radius:26px;overflow:hidden;position:relative;background:linear-gradient(100deg,#171326 0%,#171326e8 38%,#17132644 100%),url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1800&q=85') center/cover;display:flex;align-items:center;padding:clamp(26px,6vw,76px);border:1px solid #ffffff12}
-.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#0d0b17 0%,transparent 90%);pointer-events:none}.hero-content{position:relative;z-index:1;max-width:560px}.eyebrow{color:#c4b5fd;text-transform:uppercase;font-weight:800;font-size:12px;letter-spacing:2.2px}.hero h1{font-size:clamp(38px,6vw,68px);line-height:.98;margin:14px 0}.hero p{color:#c4c1d0;line-height:1.7;max-width:480px}.primary{background:linear-gradient(135deg,#a78bfa,#7c3aed);color:white;border:0;border-radius:12px;padding:13px 20px;font-weight:800;box-shadow:0 10px 30px #7c3aed33}.sectionhead{display:flex;align-items:end;justify-content:space-between;margin:30px 0 17px}.sectionhead h2{font-size:23px;margin:0}.sectionhead p{color:var(--muted);font-size:13px;margin:5px 0 0}.count{font-size:12px;color:var(--muted)}
-.grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:20px}.movie{min-width:0;cursor:pointer;transition:transform .2s}.movie:hover{transform:translateY(-5px)}.poster{aspect-ratio:2/3;border-radius:15px;overflow:hidden;background:linear-gradient(145deg,#24283a,#11131d);position:relative;border:1px solid #ffffff12}.poster img{width:100%;height:100%;object-fit:cover;display:block}.poster .fallback{height:100%;display:grid;place-items:center;color:#777d92;font-size:38px}.movie-title{font-weight:750;margin:10px 0 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.movie-meta{color:var(--muted);font-size:12px}.empty{padding:55px 15px;text-align:center;border:1px dashed #ffffff25;border-radius:18px;color:var(--muted);grid-column:1/-1}
-.footer{margin-top:70px;border-top:1px solid var(--line);padding:25px 4vw;color:#777b8e;text-align:center;font-size:12px}
-.overlay{position:fixed;inset:0;background:#000b;z-index:50;display:none;align-items:center;justify-content:center;padding:18px}.overlay.show{display:flex}.modal{width:min(760px,100%);max-height:92vh;overflow:auto;background:#121521;border:1px solid #ffffff20;border-radius:20px;padding:22px;box-shadow:0 30px 100px #000b}.modalhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}.modalhead h2{margin:0;font-size:21px}.close{background:#242838;color:white;border:0;border-radius:10px;padding:8px 12px}.field{margin:13px 0}.field label{display:block;font-size:13px;color:#c7c8d4;margin-bottom:7px}.field input,.field select{width:100%;background:#090c15;border:1px solid #34384a;color:white;border-radius:11px;padding:13px;outline:none}.field input:focus{border-color:var(--accent)}.row{display:flex;gap:10px}.row>*{flex:1;min-width:0}.note{font-size:12px;color:var(--muted);line-height:1.6}.modal-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:18px}.secondary{background:#242838;color:white;border:1px solid var(--line);border-radius:11px;padding:12px 16px}.drawerwrap{position:fixed;inset:0;background:#0009;z-index:40;display:none}.drawerwrap.show{display:block}.drawer{position:absolute;right:0;top:0;height:100%;width:min(350px,88vw);background:#111420;border-left:1px solid var(--line);padding:25px;box-shadow:-20px 0 70px #0008}.drawer .logo{margin:5px 0 30px}.drawer button{display:block;width:100%;text-align:left;margin:10px 0;padding:14px;background:#1b1f2e;border:1px solid var(--line);color:white;border-radius:12px}.drawer .danger{color:#ff9a9a}
-.playerbox{width:min(1100px,100%);background:#090a10;border-radius:18px;overflow:hidden}.playerhead{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;background:#151827}.playerframe{aspect-ratio:16/9;background:black}.playerframe iframe{width:100%;height:100%;border:0;display:block}.playernote{padding:12px 16px;color:var(--muted);font-size:12px}
-.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:90;background:#25283a;border:1px solid #ffffff25;color:white;padding:12px 18px;border-radius:12px;display:none;max-width:90vw}.toast.show{display:block}
 
-/* Welcome experience */
-.welcome-screen{position:fixed;inset:0;z-index:120;background:radial-gradient(circle at 50% 35%,#282044 0%,#100d1c 42%,#07080e 100%);display:flex;align-items:center;justify-content:center;padding:24px;transition:opacity .55s ease,visibility .55s ease}.welcome-screen.hide{opacity:0;visibility:hidden;pointer-events:none}.welcome-card{width:min(560px,100%);text-align:center;padding:clamp(28px,6vw,54px);border:1px solid #ffffff20;border-radius:28px;background:#151323c9;box-shadow:0 30px 100px #0009;backdrop-filter:blur(18px);animation:welcomeIn .7s cubic-bezier(.2,.8,.2,1) both}.welcome-mark{width:76px;height:76px;margin:0 auto 20px;border-radius:23px;display:grid;place-items:center;font-size:25px;font-weight:950;letter-spacing:-2px;background:linear-gradient(135deg,#c4b5fd,#7c3aed);box-shadow:0 12px 40px #7c3aed55;color:white}.welcome-card h1{font-size:clamp(30px,7vw,48px);margin:8px 0 12px;line-height:1.05}.welcome-card p{color:#b8b4c8;line-height:1.7;margin:0 auto 25px;max-width:400px}.welcome-card .primary{min-width:170px}.welcome-kicker{font-size:11px;letter-spacing:3px;color:#c4b5fd;font-weight:850;text-transform:uppercase}@keyframes welcomeIn{from{opacity:0;transform:translateY(22px) scale(.97)}to{opacity:1;transform:none}}
-/* Movie preview and dedicated watch page */
-.preview-modal{width:min(470px,100%);padding:0;overflow:hidden}.preview-poster{height:245px;background:#080910;position:relative}.preview-poster img{width:100%;height:100%;object-fit:cover;display:block}.preview-poster:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#111420 0%,transparent 70%)}.preview-body{padding:22px}.preview-body h2{font-size:24px;margin:0 0 8px}.preview-body p{color:var(--muted);font-size:13px;line-height:1.6;margin:0}.preview-actions{display:flex;gap:10px;margin-top:20px}.preview-actions>*{flex:1}.watch-page{display:none;width:min(1120px,92vw);margin:26px auto 70px;animation:welcomeIn .35s ease both}.watch-mode #home,.watch-mode .footer{display:none}.watch-mode .watch-page{display:block}.watch-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}.watch-top h1{font-size:clamp(21px,4vw,30px);margin:0}.watch-player{aspect-ratio:16/9;background:#000;border:1px solid #ffffff20;border-radius:18px;overflow:hidden;box-shadow:0 22px 70px #0007}.watch-player iframe{width:100%;height:100%;border:0;display:block}.watch-info{padding:18px 2px}.watch-info p{color:var(--muted);font-size:13px;line-height:1.6}.back-home{background:#242838;color:white;border:1px solid var(--line);border-radius:11px;padding:11px 15px;white-space:nowrap}.welcome-clock{color:#a7a0bd;font-size:12px;margin-top:14px}
-@media(max-width:1000px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}@media(max-width:720px){.nav{display:none}.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.hero{min-height:300px}.search{width:min(220px,38vw)}}
-@media(max-width:480px){.topbar{height:62px;gap:9px}.logo{font-size:19px}.search{width:36vw;padding:9px 12px}.adminbtn{padding:9px 10px;font-size:12px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.hero{margin-top:18px;padding:24px;min-height:280px}.sectionhead h2{font-size:20px}.row{flex-direction:column}}
+<style>
+:root{
+--bg:#090a10;
+--panel:#131520;
+--text:#f5f5f8;
+--muted:#9699aa;
+--accent:#a78bfa;
+--line:#ffffff13;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+margin:0;background:var(--bg);color:var(--text);
+font-family:Arial,system-ui,sans-serif
+}
+button,input{font:inherit}
+button{cursor:pointer}
+.topbar{
+height:72px;display:flex;align-items:center;gap:15px;
+padding:0 4%;border-bottom:1px solid var(--line);
+position:sticky;top:0;z-index:20;
+background:#090a10ed;backdrop-filter:blur(18px)
+}
+.logo{font-weight:950;letter-spacing:1px;font-size:23px;white-space:nowrap}
+.logo b{color:var(--accent)}
+.nav{display:flex;gap:20px;margin-left:20px}
+.nav a{color:#c7c7d1;text-decoration:none;font-size:14px}
+.spacer{flex:1}
+.search{
+width:min(280px,35vw);background:#171925;border:1px solid var(--line);
+border-radius:999px;padding:11px 16px;color:white;outline:none
+}
+.iconbtn,.adminbtn{
+background:#1b1d2b;border:1px solid var(--line);
+color:white;border-radius:12px;padding:10px 13px
+}
+.adminbtn{background:#7c3aed;border:0;font-weight:750}
+main{width:min(1320px,92vw);margin:auto}
+.hero{
+margin:28px 0 34px;min-height:340px;border-radius:26px;
+overflow:hidden;position:relative;
+background:linear-gradient(100deg,#171326 0%,#171326e8 45%,#17132644 100%),
+url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1800&q=85') center/cover;
+display:flex;align-items:center;padding:clamp(26px,6vw,76px);
+border:1px solid #ffffff12
+}
+.hero:after{
+content:"";position:absolute;inset:0;
+background:linear-gradient(90deg,#0d0b17 0%,transparent 90%);
+pointer-events:none
+}
+.hero-content{position:relative;z-index:1;max-width:560px}
+.eyebrow{
+color:#c4b5fd;text-transform:uppercase;font-weight:800;
+font-size:12px;letter-spacing:2px
+}
+.hero h1{font-size:clamp(38px,6vw,68px);line-height:1;margin:14px 0}
+.hero p{color:#c4c1d0;line-height:1.7;max-width:480px}
+.primary{
+background:linear-gradient(135deg,#a78bfa,#7c3aed);
+color:white;border:0;border-radius:12px;padding:13px 20px;
+font-weight:800
+}
+.sectionhead{
+display:flex;align-items:end;justify-content:space-between;
+margin:30px 0 17px
+}
+.sectionhead h2{font-size:23px;margin:0}
+.sectionhead p,.note{color:var(--muted);font-size:13px}
+.count{font-size:12px;color:var(--muted)}
+.grid{
+display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:20px
+}
+.movie{min-width:0;cursor:pointer;transition:transform .2s}
+.movie:hover{transform:translateY(-5px)}
+.poster{
+aspect-ratio:2/3;border-radius:15px;overflow:hidden;
+background:#191c2a;position:relative;border:1px solid #ffffff12
+}
+.poster img{width:100%;height:100%;object-fit:cover;display:block}
+.poster .fallback{
+height:100%;display:grid;place-items:center;color:#777d92;font-size:38px
+}
+.movie-title{
+font-weight:750;margin:10px 0 3px;
+white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+}
+.movie-meta{color:var(--muted);font-size:12px}
+.empty{
+padding:55px 15px;text-align:center;border:1px dashed #ffffff25;
+border-radius:18px;color:var(--muted);grid-column:1/-1
+}
+.footer{
+margin-top:70px;border-top:1px solid var(--line);
+padding:25px 4vw;color:#777b8e;text-align:center;font-size:12px
+}
+.overlay{
+position:fixed;inset:0;background:#000b;z-index:50;
+display:none;align-items:center;justify-content:center;padding:18px
+}
+.overlay.show{display:flex}
+.modal{
+width:min(760px,100%);max-height:92vh;overflow:auto;
+background:#121521;border:1px solid #ffffff20;
+border-radius:20px;padding:22px
+}
+.modalhead{
+display:flex;align-items:center;justify-content:space-between;
+gap:12px;margin-bottom:18px
+}
+.modalhead h2{margin:0;font-size:21px}
+.close{
+background:#242838;color:white;border:0;
+border-radius:10px;padding:8px 12px
+}
+.field{margin:13px 0}
+.field label{
+display:block;font-size:13px;color:#c7c8d4;margin-bottom:7px
+}
+.field input,.field select{
+width:100%;background:#090c15;border:1px solid #34384a;
+color:white;border-radius:11px;padding:13px;outline:none
+}
+.thumb-preview{
+display:none;width:92px;height:132px;object-fit:cover;
+border-radius:10px;border:1px solid #ffffff30;margin-top:10px
+}
+.thumb-preview.show{display:block}
+.filepick{
+display:block;width:100%;background:#090c15;
+border:1px dashed #6d648b;color:#ddd;
+border-radius:11px;padding:13px
+}
+.row{display:flex;gap:10px}
+.row>*{flex:1;min-width:0}
+.note{font-size:12px;line-height:1.6}
+.modal-actions{
+display:flex;justify-content:flex-end;gap:9px;margin-top:18px
+}
+.secondary{
+background:#242838;color:white;border:1px solid var(--line);
+border-radius:11px;padding:12px 16px
+}
+.drawerwrap{
+position:fixed;inset:0;background:#0009;z-index:40;display:none
+}
+.drawerwrap.show{display:block}
+.drawer{
+position:absolute;right:0;top:0;height:100%;width:min(350px,88vw);
+background:#111420;border-left:1px solid var(--line);padding:25px
+}
+.drawer button{
+display:block;width:100%;text-align:left;margin:10px 0;
+padding:14px;background:#1b1f2e;border:1px solid var(--line);
+color:white;border-radius:12px
+}
+.preview-modal{width:min(470px,100%);padding:0;overflow:hidden}
+.preview-poster{height:245px;background:#080910}
+.preview-poster img{width:100%;height:100%;object-fit:cover}
+.preview-body{padding:22px}
+.preview-body h2{font-size:24px;margin:0 0 8px}
+.preview-body p{color:var(--muted);font-size:13px;line-height:1.6}
+.preview-actions{display:flex;gap:10px;margin-top:20px}
+.preview-actions>*{flex:1}
+.watch-page{
+display:none;width:min(1120px,92vw);
+margin:26px auto 70px
+}
+.watch-mode #home,.watch-mode .footer{display:none}
+.watch-mode .watch-page{display:block}
+.watch-top{
+display:flex;align-items:center;justify-content:space-between;
+gap:12px;margin-bottom:18px
+}
+.watch-top h1{font-size:clamp(21px,4vw,30px)}
+.watch-player{
+aspect-ratio:16/9;background:#000;border:1px solid #ffffff20;
+border-radius:18px;overflow:hidden
+}
+.watch-player iframe{width:100%;height:100%;border:0;display:block}
+.watch-info{padding:18px 2px}
+.watch-info p{color:var(--muted);font-size:13px;line-height:1.6}
+.back-home{
+background:#242838;color:white;border:1px solid var(--line);
+border-radius:11px;padding:11px 15px
+}
+.welcome-screen{
+position:fixed;inset:0;z-index:120;
+background:radial-gradient(circle at 50% 35%,#282044,#100d1c 55%,#07080e);
+display:flex;align-items:center;justify-content:center;padding:24px;
+transition:opacity .55s,visibility .55s
+}
+.welcome-screen.hide{opacity:0;visibility:hidden;pointer-events:none}
+.welcome-card{
+width:min(560px,100%);text-align:center;padding:40px 25px;
+border:1px solid #ffffff20;border-radius:28px;
+background:#151323c9;box-shadow:0 30px 100px #0009;
+animation:welcomeIn .7s ease both
+}
+.welcome-mark{
+width:76px;height:76px;margin:0 auto 20px;border-radius:23px;
+display:grid;place-items:center;font-size:25px;font-weight:950;
+background:linear-gradient(135deg,#c4b5fd,#7c3aed)
+}
+.welcome-card h1{font-size:clamp(30px,7vw,48px);margin:8px 0 12px}
+.welcome-card p{color:#b8b4c8;line-height:1.7;margin-bottom:25px}
+.welcome-clock{color:#a7a0bd;font-size:12px;margin-top:14px}
+@keyframes welcomeIn{
+from{opacity:0;transform:translateY(22px) scale(.97)}
+to{opacity:1;transform:none}
+}
+.toast{
+position:fixed;bottom:22px;left:50%;transform:translateX(-50%);
+z-index:150;background:#25283a;border:1px solid #ffffff25;
+color:white;padding:12px 18px;border-radius:12px;
+display:none;max-width:90vw
+}
+.toast.show{display:block}
+@media(max-width:1000px){
+.grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media(max-width:720px){
+.nav{display:none}
+.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.hero{min-height:300px}
+.search{width:min(220px,38vw)}
+}
+@media(max-width:480px){
+.topbar{height:62px;gap:9px}
+.logo{font-size:19px}
+.search{width:36vw;padding:9px 12px}
+.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.hero{margin-top:18px;padding:24px;min-height:280px}
+.row{flex-direction:column}
+}
 </style>
 </head>
+
 <body>
+
 <div class="welcome-screen" id="welcomeScreen">
  <div class="welcome-card">
   <div class="welcome-mark">SP</div>
-  <div class="welcome-kicker">Welcome to SP Movies</div>
+  <div class="eyebrow">WELCOME TO SP MOVIES</div>
   <h1 id="welcomeGreeting">Welcome!</h1>
-  <p id="welcomeMessage">Your next movie night starts here. Explore the latest additions.</p>
-  <button class="primary" id="enterSite">Explore Movies&nbsp; →</button>
+  <p id="welcomeMessage">Your next movie night starts here.</p>
+  <button class="primary" id="enterSite">Explore Movies →</button>
   <div class="welcome-clock" id="welcomeClock"></div>
  </div>
 </div>
+
 <header class="topbar">
-  <div class="logo">SP <b>MOVIES</b></div>
-  <nav class="nav"><a href="#home">Home</a><a href="#latest">Latest Movies</a></nav>
-  <div class="spacer"></div>
-  <input class="search" id="search" placeholder="Search movies..." aria-label="Search movies">
-  <button class="iconbtn" id="menuBtn" aria-label="Open menu">☰</button>
+ <div class="logo">SP <b>MOVIES</b></div>
+ <nav class="nav">
+  <a href="#home">Home</a>
+  <a href="#latest">Latest Movies</a>
+ </nav>
+ <div class="spacer"></div>
+ <input class="search" id="search" placeholder="Search movies...">
+ <button class="iconbtn" id="menuBtn">☰</button>
 </header>
+
 <main id="home">
-  <section class="hero">
-    <div class="hero-content">
-      <div class="eyebrow">Your movie destination</div>
-      <h1>Stories worth<br>staying up for.</h1>
-      <p>Discover the latest additions in one place. Pick a title, open its details and enjoy the embedded player.</p>
-      <button class="primary" onclick="document.getElementById('latest').scrollIntoView({behavior:'smooth'})">Explore Movies&nbsp; →</button>
-    </div>
-  </section>
-  <section id="latest">
-    <div class="sectionhead"><div><h2>Latest Movies</h2><p>Freshly added to SP Movies</p></div><span class="count" id="movieCount">0 titles</span></div>
-    <div class="grid" id="movieGrid"><div class="empty">Loading movies…</div></div>
-  </section>
+ <section class="hero">
+  <div class="hero-content">
+   <div class="eyebrow">YOUR MOVIE DESTINATION</div>
+   <h1>Stories worth<br>staying up for.</h1>
+   <p>Discover the latest additions in one place. Pick a title, open its details and enjoy the embedded player.</p>
+   <button class="primary" onclick="document.getElementById('latest').scrollIntoView({behavior:'smooth'})">Explore Movies →</button>
+  </div>
+ </section>
+
+ <section id="latest">
+  <div class="sectionhead">
+   <div><h2>Latest Movies</h2><p>Freshly added to SP Movies</p></div>
+   <span class="count" id="movieCount">0 titles</span>
+  </div>
+  <div class="grid" id="movieGrid">
+   <div class="empty">Loading movies…</div>
+  </div>
+ </section>
 </main>
+
 <section class="watch-page" id="watchPage">
- <div class="watch-top"><button class="back-home" id="backHome">← Back to Movies</button><span class="eyebrow">SP MOVIES · NOW PLAYING</span></div>
+ <div class="watch-top">
+  <button class="back-home" id="backHome">← Back to Movies</button>
+  <span class="eyebrow">SP MOVIES · NOW PLAYING</span>
+ </div>
  <h1 id="watchTitle">Loading movie…</h1>
- <div class="watch-player"><video id="watchVideo" controls playsinline preload="metadata" style="width:100%;height:100%;display:block;background:#000"></video></div>
- <div class="watch-info"><h2 id="watchInfoTitle"></h2><p>Playback is provided by the linked video host. If it does not load, the host may not allow embedded playback in this page.</p></div>
+ <div class="watch-player">
+  <iframe id="watchFrame" src="about:blank"
+   allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+   allowfullscreen title="Movie player"></iframe>
+ </div>
+ <div class="watch-info">
+  <h2 id="watchInfoTitle"></h2>
+  <p>Playback is provided by the linked video host. The host must allow embedded playback.</p>
+ </div>
 </section>
-<footer class="footer">SP MOVIES · Stream content you are authorized to access and distribute.</footer>
+
+<footer class="footer">
+ SP MOVIES · Stream content you are authorized to access and distribute.
+</footer>
 
 <div class="drawerwrap" id="drawerWrap">
-  <aside class="drawer">
-    <div class="modalhead"><div class="logo">SP <b>MOVIES</b></div><button class="close" id="closeDrawer">✕</button></div>
-    <p class="note">Quick access</p>
-    <button id="drawerHome">⌂ &nbsp; Home</button>
-    <button id="drawerAdmin">⚙ &nbsp; Open Admin Panel</button>
-    <p class="note" style="margin-top:28px">Admin panel is open for local testing. Movies and files are saved in this browser only.</p>
-  </aside>
+ <aside class="drawer">
+  <div class="modalhead">
+   <div class="logo">SP <b>MOVIES</b></div>
+   <button class="close" id="closeDrawer">✕</button>
+  </div>
+  <p class="note">Quick access</p>
+  <button id="drawerHome">⌂ &nbsp; Home</button>
+  <button id="drawerAdmin">⚙ &nbsp; Open Admin Panel</button>
+  <p class="note">Add movies using a thumbnail and an authorized embed URL.</p>
+ </aside>
 </div>
 
 <div class="overlay" id="adminOverlay">
  <div class="modal">
-  <div class="modalhead"><div><h2>Movie Manager</h2><div class="note">Open admin · No login required · Local browser storage</div></div><button class="close" data-close="adminOverlay">✕</button></div>
-  <div class="field"><label>Movie title</label><input id="movieTitle" placeholder="Enter movie title"></div>
-  <div class="field"><label>Poster / Thumbnail image (choose from phone)</label><input id="moviePosterFile" type="file" accept="image/*"></div>
-  <div class="field"><label>Video file (MP4 recommended)</label><input id="movieVideoFile" type="file" accept="video/mp4,video/webm,video/ogg,video/*"></div>
-  <div class="field"><label>Visibility</label><select id="movieStatus"><option value="published">Published</option><option value="draft">Draft</option></select></div>
-  <p class="note">Files are stored in this browser's local database (IndexedDB), not uploaded to a public server. Use MP4 for best browser compatibility. Large videos may exceed your phone/browser storage quota.</p>
-  <div class="modal-actions"><button class="secondary" id="resetForm">Clear</button><button class="primary" id="saveMovie">Publish Movie</button></div>
+  <div class="modalhead">
+   <h2>Movie Manager</h2>
+   <button class="close" data-close="adminOverlay">✕</button>
+  </div>
+
+  <div class="row">
+   <div class="field">
+    <label>Movie title</label>
+    <input id="movieTitle" placeholder="Enter movie title">
+   </div>
+   <div class="field">
+    <label>Visibility</label>
+    <select id="movieStatus">
+     <option value="published">Published</option>
+     <option value="draft">Draft</option>
+    </select>
+   </div>
+  </div>
+
+  <div class="field">
+   <label>Thumbnail Gallery se upload karo</label>
+   <input class="filepick" id="movieThumbFile" type="file" accept="image/*">
+   <img class="thumb-preview" id="thumbPreview" alt="Thumbnail preview">
+   <p class="note">Ya phir neeche image URL paste kar sakte ho.</p>
+   <input id="movieThumb" type="url" placeholder="https://example.com/poster.jpg">
+  </div>
+
+  <div class="field">
+   <label>Embed video URL</label>
+   <input id="movieEmbed" type="url" placeholder="https://video-host.example/embed/123">
+  </div>
+
+  <p class="note">
+   Video external host se stream hoga; SP Movies par video upload nahi hoga.
+  </p>
+
+  <div class="modal-actions">
+   <button class="secondary" id="resetForm">Clear</button>
+   <button class="primary" id="saveMovie">Publish Movie</button>
+  </div>
+
   <hr style="border:0;border-top:1px solid var(--line);margin:24px 0">
   <h3 style="font-size:16px">Existing movies</h3>
   <div id="adminMovieList" class="note">Loading…</div>
-  <div class="modal-actions"><button class="secondary" id="logoutBtn">Logout</button></div>
+  <p class="note">No login required. Movies are saved in this browser only.</p>
  </div>
 </div>
 
 <div class="overlay" id="previewOverlay">
  <div class="modal preview-modal">
-  <div class="preview-poster"><img id="previewThumb" src="" alt="Selected movie poster"></div>
-  <div class="preview-body"><div class="eyebrow">MOVIE PREVIEW</div><h2 id="previewTitle">Movie title</h2><p>Ready to watch? Continue to open this title on its own watch page.</p>
-   <div class="preview-actions"><button class="secondary" id="cancelPreview">Not now</button><button class="primary" id="confirmPlay">▶ Play Now</button></div>
+  <div class="preview-poster">
+   <img id="previewThumb" src="" alt="Movie poster">
+  </div>
+  <div class="preview-body">
+   <div class="eyebrow">MOVIE PREVIEW</div>
+   <h2 id="previewTitle">Movie title</h2>
+   <p>Ready to watch? Continue to open this title on its own watch page.</p>
+   <div class="preview-actions">
+    <button class="secondary" id="cancelPreview">Not now</button>
+    <button class="primary" id="confirmPlay">▶ Play Now</button>
+   </div>
   </div>
  </div>
 </div>
-<div class="overlay" id="playerOverlay">
- <div class="playerbox">
-  <div class="playerhead"><strong id="playingTitle">Now Playing</strong><button class="close" data-close="playerOverlay">✕ Close</button></div>
-  <div class="playerframe"><iframe id="embedFrame" src="about:blank" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" title="Movie player"></iframe></div>
-  <div class="playernote">If playback does not start, the video host may block embedding or require its own access permissions.</div>
- </div>
-</div>
-<div class="toast" id="toast"></div>
 
-<script>
+<div class="toast" id="toast"></div><script>
 const $ = id => document.getElementById(id);
-let allMovies=[], editingId=null, selectedMovieId=null, dbPromise=null, objectUrls=new Map();
-const DB_NAME='SPMoviesLocalDB', DB_VERSION=1, STORE='movies';
-function toast(message){const t=$('toast');t.textContent=message;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500)}
-function open(id){$(id).classList.add('show')} function close(id){$(id).classList.remove('show')}
-function escapeHtml(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function db(){if(!('indexedDB' in window))return Promise.reject(new Error('This browser does not support local file storage.'));if(!dbPromise)dbPromise=new Promise((resolve,reject)=>{const req=indexedDB.open(DB_NAME,DB_VERSION);req.onupgradeneeded=()=>{const d=req.result;if(!d.objectStoreNames.contains(STORE))d.createObjectStore(STORE,{keyPath:'id'})};req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)});return dbPromise}
-async function dbAll(){const d=await db();return new Promise((resolve,reject)=>{const r=d.transaction(STORE).objectStore(STORE).getAll();r.onsuccess=()=>resolve(r.result||[]);r.onerror=()=>reject(r.error)})}
-async function dbPut(movie){const d=await db();return new Promise((resolve,reject)=>{const tx=d.transaction(STORE,'readwrite');tx.objectStore(STORE).put(movie);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)})}
-async function dbDelete(id){const d=await db();return new Promise((resolve,reject)=>{const tx=d.transaction(STORE,'readwrite');tx.objectStore(STORE).delete(id);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)})}
-function fileUrl(id,kind){const m=allMovies.find(x=>x.id===id);if(!m)return '';const blob=kind==='video'?m.videoBlob:m.posterBlob;if(!blob)return '';const key=id+':'+kind;if(!objectUrls.has(key))objectUrls.set(key,URL.createObjectURL(blob));return objectUrls.get(key)}
-function revokeUrls(id){for(const key of [id+':video',id+':poster'])if(objectUrls.has(key)){URL.revokeObjectURL(objectUrls.get(key));objectUrls.delete(key)}}
-function renderMovies(){const q=$('search').value.trim().toLowerCase();const items=allMovies.filter(m=>m.status==='published'&&m.title.toLowerCase().includes(q));$('movieCount').textContent=`${items.length} ${items.length===1?'title':'titles'}`;$('movieGrid').innerHTML=items.length?items.map(m=>{const poster=fileUrl(m.id,'poster');return `<article class="movie" data-id="${escapeHtml(m.id)}"><div class="poster">${poster?`<img loading="lazy" src="${poster}" alt="${escapeHtml(m.title)} poster">`:'<div class="fallback">▶</div>'}</div><div class="movie-title">${escapeHtml(m.title)}</div><div class="movie-meta">SP Movies</div></article>`}).join(''):'<div class="empty">No movies yet. Open Admin Panel to upload your first movie.</div>';document.querySelectorAll('.movie').forEach(card=>card.addEventListener('click',()=>openMoviePreview(card.dataset.id)));}
-function openMoviePreview(id){const m=allMovies.find(x=>x.id===id);if(!m)return;selectedMovieId=id;$('previewTitle').textContent=m.title;const poster=fileUrl(id,'poster');$('previewThumb').src=poster||'';$('previewThumb').style.display=poster?'block':'none';open('previewOverlay')}
-function openWatchPage(id){const m=allMovies.find(x=>x.id===id);if(!m||!m.videoBlob){toast('Video file is missing. Please edit and upload it again.');return}close('previewOverlay');history.pushState({watchId:id},'',`${location.pathname}?watch=${encodeURIComponent(id)}`);document.body.classList.add('watch-mode');$('watchTitle').textContent=m.title;$('watchInfoTitle').textContent=m.title;const v=$('watchVideo');v.pause();v.src=fileUrl(id,'video');v.load();window.scrollTo({top:0,behavior:'smooth'});}
-function returnHome(){history.pushState({},'',location.pathname);document.body.classList.remove('watch-mode');const v=$('watchVideo');v.pause();v.removeAttribute('src');v.load();window.scrollTo({top:0,behavior:'smooth'});}
-function renderAdminList(){$('adminMovieList').innerHTML=allMovies.length?allMovies.map(m=>`<div style="display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--line)"><div style="flex:1;min-width:0"><b>${escapeHtml(m.title)}</b><div style="color:#9699aa;font-size:11px">${escapeHtml(m.status)} · ${m.videoBlob?Math.round(m.videoBlob.size/1048576)+' MB':'No video'}</div></div><button class="secondary editMovie" data-id="${escapeHtml(m.id)}" style="padding:8px 10px">Edit</button><button class="secondary deleteMovie" data-id="${escapeHtml(m.id)}" style="padding:8px 10px;color:#ff9a9a">Delete</button></div>`).join(''):'No uploaded movies yet.';document.querySelectorAll('.editMovie').forEach(b=>b.onclick=()=>{const m=allMovies.find(x=>x.id===b.dataset.id);if(!m)return;editingId=m.id;$('movieTitle').value=m.title;$('movieStatus').value=m.status;$('saveMovie').textContent='Save Changes';toast('Choose new files only if you want to replace the existing files.')});document.querySelectorAll('.deleteMovie').forEach(b=>b.onclick=async()=>{if(!confirm('Delete this movie from this browser?'))return;try{await dbDelete(b.dataset.id);revokeUrls(b.dataset.id);allMovies=allMovies.filter(x=>x.id!==b.dataset.id);renderMovies();renderAdminList();toast('Movie deleted from this browser.');if(editingId===b.dataset.id)resetForm()}catch(e){toast('Delete failed: '+e.message)}})}
-function resetForm(){editingId=null;$('movieTitle').value='';$('moviePosterFile').value='';$('movieVideoFile').value='';$('movieStatus').value='published';$('saveMovie').textContent='Publish Movie'}
-async function saveMovie(){const title=$('movieTitle').value.trim(),posterFile=$('moviePosterFile').files[0],videoFile=$('movieVideoFile').files[0],status=$('movieStatus').value;if(!title){toast('Please enter a movie title.');return}if(!editingId&&(!posterFile||!videoFile)){toast('Choose both a poster image and a video file.');return}if(posterFile&&!posterFile.type.startsWith('image/')){toast('Poster must be an image file.');return}if(videoFile&&!videoFile.type.startsWith('video/')){toast('Choose a valid video file.');return}const old=allMovies.find(m=>m.id===editingId)||{};const movie={id:editingId||('m_'+Date.now()+'_'+Math.random().toString(36).slice(2,8)),title,status,posterBlob:posterFile||old.posterBlob||null,videoBlob:videoFile||old.videoBlob||null,updatedAt:Date.now(),createdAt:old.createdAt||Date.now()};try{await dbPut(movie);if(editingId)revokeUrls(editingId);const idx=allMovies.findIndex(m=>m.id===movie.id);if(idx>=0)allMovies[idx]=movie;else allMovies.unshift(movie);renderMovies();renderAdminList();resetForm();toast('Movie saved in this browser. You can play it now.')}catch(e){console.error(e);toast('Could not save. Browser storage may be full: '+(e.message||'storage error'))}}
-function initWelcome(){const h=new Date().getHours();$('welcomeGreeting').textContent=h<12?'Good Morning!':h<17?'Good Afternoon!':h<21?'Good Evening!':'Welcome, Night Owl!';const lines=['Your next movie night starts here.','Fresh stories. New discoveries. One destination.','Sit back, explore, and find your next favourite.'];$('welcomeMessage').textContent=lines[Math.floor(Math.random()*lines.length)];$('welcomeClock').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long'})}
-async function init(){initWelcome();try{allMovies=await dbAll();allMovies.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));renderMovies();renderAdminList();const id=new URLSearchParams(location.search).get('watch');if(id)openWatchPage(id)}catch(e){toast('Local storage unavailable: '+e.message);$('movieGrid').innerHTML='<div class="empty">Your browser does not support local movie storage.</div>'}}
-$('search').addEventListener('input',renderMovies);$('menuBtn').onclick=()=>$('drawerWrap').classList.add('show');$('closeDrawer').onclick=()=>$('drawerWrap').classList.remove('show');$('drawerHome').onclick=()=>{$('drawerWrap').classList.remove('show');returnHome()};$('drawerAdmin').onclick=()=>{$('drawerWrap').classList.remove('show');open('adminOverlay');renderAdminList()};$('saveMovie').onclick=saveMovie;$('resetForm').onclick=resetForm;$('logoutBtn').textContent='Close Admin Panel';$('logoutBtn').onclick=()=>close('adminOverlay');$('enterSite').onclick=()=>$('welcomeScreen').classList.add('hide');$('cancelPreview').onclick=()=>close('previewOverlay');$('confirmPlay').onclick=()=>openWatchPage(selectedMovieId);$('backHome').onclick=returnHome;document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>close(b.dataset.close)));document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)close(o.id)}));window.addEventListener('popstate',()=>{const id=new URLSearchParams(location.search).get('watch');if(id)openWatchPage(id);else returnHome()});init();
+const STORE = 'spmovies_embed_catalog_v2';
+
+let allMovies = [];
+let editingId = null;
+let selectedMovieId = null;
+let selectedThumbnailData = '';
+
+function toast(message){
+ const t = $('toast');
+ t.textContent = message;
+ t.classList.add('show');
+ setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+function open(id){ $(id).classList.add('show'); }
+function close(id){ $(id).classList.remove('show'); }
+
+function safe(value=''){
+ return String(value).replace(/[&<>"']/g, char => ({
+  '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+ }[char]));
+}
+
+function validUrl(value){
+ try{
+  const url = new URL(value);
+  return url.protocol === 'http:' || url.protocol === 'https:';
+ }catch(e){
+  return false;
+ }
+}
+
+function loadMovies(){
+ try{
+  allMovies = JSON.parse(localStorage.getItem(STORE) || '[]');
+ }catch(e){
+  allMovies = [];
+ }
+ renderMovies();
+ renderAdminList();
+ renderWatchPage();
+}
+
+function saveMovies(){
+ try{
+  localStorage.setItem(STORE,JSON.stringify(allMovies));
+  renderMovies();
+  renderAdminList();
+ }catch(e){
+  toast('Storage full. Chhoti thumbnail image try karo.');
+ }
+}
+
+function renderMovies(){
+ const query = $('search').value.trim().toLowerCase();
+ const items = allMovies.filter(movie =>
+  movie.status === 'published' &&
+  movie.title.toLowerCase().includes(query)
+ );
+
+ $('movieCount').textContent =
+  `${items.length} ${items.length===1?'title':'titles'}`;
+
+ $('movieGrid').innerHTML = items.length
+ ? items.map(movie => `
+  <article class="movie" data-id="${safe(movie.id)}">
+   <div class="poster">
+    ${movie.thumbnail
+     ? `<img loading="lazy" src="${safe(movie.thumbnail)}" alt="${safe(movie.title)}" onerror="this.style.display='none'">`
+     : '<div class="fallback">▶</div>'}
+   </div>
+   <div class="movie-title">${safe(movie.title)}</div>
+   <div class="movie-meta">SP Movies</div>
+  </article>
+ `).join('')
+ : '<div class="empty">No movies yet. Open Admin Panel to add a movie.</div>';
+
+ document.querySelectorAll('.movie').forEach(card=>{
+  card.onclick = ()=>openMoviePreview(card.dataset.id);
+ });
+}
+
+function openMoviePreview(id){
+ const movie = allMovies.find(item=>item.id===id);
+ if(!movie) return;
+
+ selectedMovieId = id;
+ $('previewTitle').textContent = movie.title;
+ $('previewThumb').src = movie.thumbnail || '';
+ open('previewOverlay');
+}
+
+function openWatchPage(id){
+ const movie = allMovies.find(item=>item.id===id);
+
+ if(!movie || !movie.embedUrl){
+  toast('Embed link missing. Edit this movie in Admin Panel.');
+  return;
+ }
+
+ close('previewOverlay');
+
+ const url = new URL(location.href);
+ url.searchParams.set('watch',id);
+ history.pushState({watchId:id},'',url);
+
+ renderWatchPage();
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function renderWatchPage(){
+ const id = new URLSearchParams(location.search).get('watch');
+
+ if(!id){
+  document.body.classList.remove('watch-mode');
+  $('watchFrame').src = 'about:blank';
+  $('watchFrame').dataset.movieId = '';
+  return;
+ }
+
+ document.body.classList.add('watch-mode');
+
+ const movie = allMovies.find(item=>item.id===id);
+
+ if(!movie){
+  $('watchTitle').textContent = 'Movie not found in this browser';
+  $('watchInfoTitle').textContent = '';
+  $('watchFrame').src = 'about:blank';
+  return;
+ }
+
+ if(movie.status!=='published' || !movie.embedUrl){
+  $('watchTitle').textContent = 'Movie unavailable';
+  $('watchFrame').src = 'about:blank';
+  return;
+ }
+
+ $('watchTitle').textContent = movie.title;
+ $('watchInfoTitle').textContent = movie.title;
+
+ const frame = $('watchFrame');
+
+ if(frame.dataset.movieId!==id){
+  frame.src = movie.embedUrl;
+  frame.dataset.movieId = id;
+ }
+}
+
+function returnHome(){
+ const url = new URL(location.href);
+ url.searchParams.delete('watch');
+ history.pushState({},'',url);
+ renderWatchPage();
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function resetForm(){
+ editingId = null;
+ selectedThumbnailData = '';
+
+ $('movieTitle').value = '';
+ $('movieThumb').value = '';
+ $('movieThumbFile').value = '';
+ $('thumbPreview').src = '';
+ $('thumbPreview').classList.remove('show');
+ $('movieEmbed').value = '';
+ $('movieStatus').value = 'published';
+ $('saveMovie').textContent = 'Publish Movie';
+}
+
+function saveMovie(){
+ const title = $('movieTitle').value.trim();
+ const thumbnail = selectedThumbnailData || $('movieThumb').value.trim();
+ const embedUrl = $('movieEmbed').value.trim();
+ const status = $('movieStatus').value;
+
+ if(!title || !thumbnail ||
+   (!thumbnail.startsWith('data:image/') && !validUrl(thumbnail)) ||
+   !validUrl(embedUrl)){
+  toast('Title, thumbnail image aur valid embed URL enter karo.');
+  return;
+ }
+
+ const oldMovie = allMovies.find(item=>item.id===editingId);
+
+ const movie = {
+  id: editingId || ('m'+Date.now()),
+  title,
+  thumbnail,
+  embedUrl,
+  status
+ };
+
+ if(oldMovie){
+  Object.assign(oldMovie,movie);
+ }else{
+  allMovies.unshift(movie);
+ }
+
+ saveMovies();
+ resetForm();
+ toast('Movie saved in this browser.');
+}
+
+function renderAdminList(){
+ const element = $('adminMovieList');
+ if(!element) return;
+
+ element.innerHTML = allMovies.length
+ ? allMovies.map(movie=>`
+  <div style="display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--line)">
+   <div style="flex:1;min-width:0">
+    <b>${safe(movie.title)}</b>
+    <div style="color:#9699aa;font-size:11px">${safe(movie.status)}</div>
+   </div>
+   <button class="secondary editMovie" data-id="${safe(movie.id)}" style="padding:8px 10px">Edit</button>
+   <button class="secondary deleteMovie" data-id="${safe(movie.id)}" style="padding:8px 10px;color:#ff9a9a">Delete</button>
+  </div>
+ `).join('')
+ : 'No movies added yet.';
+
+ element.querySelectorAll('.editMovie').forEach(button=>{
+  button.onclick = ()=>{
+   const movie = allMovies.find(item=>item.id===button.dataset.id);
+   if(!movie) return;
+
+   editingId = movie.id;
+   $('movieTitle').value = movie.title;
+   $('movieThumb').value = movie.thumbnail.startsWith('data:image/') ? '' : movie.thumbnail;
+   selectedThumbnailData = movie.thumbnail.startsWith('data:image/') ? movie.thumbnail : '';
+   $('thumbPreview').src = movie.thumbnail;
+   $('thumbPreview').classList.add('show');
+   $('movieThumbFile').value = '';
+   $('movieEmbed').value = movie.embedUrl;
+   $('movieStatus').value = movie.status;
+   $('saveMovie').textContent = 'Save Changes';
+  };
+ });
+
+ element.querySelectorAll('.deleteMovie').forEach(button=>{
+  button.onclick = ()=>{
+   if(!confirm('Delete this movie?')) return;
+
+   allMovies = allMovies.filter(item=>item.id!==button.dataset.id);
+   saveMovies();
+
+   if(editingId===button.dataset.id) resetForm();
+
+   toast('Movie deleted.');
+  };
+ });
+}
+
+/* GALLERY IMAGE UPLOAD */
+$('movieThumbFile').addEventListener('change',event=>{
+ const file = event.target.files && event.target.files[0];
+ if(!file) return;
+
+ if(!file.type.startsWith('image/')){
+  toast('Please select an image file.');
+  event.target.value = '';
+  return;
+ }
+
+ if(file.size > 10*1024*1024){
+  toast('Image 10 MB se chhoti select karo.');
+  event.target.value = '';
+  return;
+ }
+
+ const reader = new FileReader();
+
+ reader.onload = ()=>{
+  const image = new Image();
+
+  image.onload = ()=>{
+   const maxWidth = 600;
+   const maxHeight = 900;
+   const scale = Math.min(1,maxWidth/image.width,maxHeight/image.height);
+
+   const canvas = document.createElement('canvas');
+   canvas.width = Math.round(image.width*scale);
+   canvas.height = Math.round(image.height*scale);
+
+   canvas.getContext('2d').drawImage(
+    image,0,0,canvas.width,canvas.height
+   );
+
+   selectedThumbnailData = canvas.toDataURL('image/jpeg',0.82);
+
+   $('thumbPreview').src = selectedThumbnailData;
+   $('thumbPreview').classList.add('show');
+   $('movieThumb').value = '';
+
+   toast('Thumbnail selected. Ab movie save karo.');
+  };
+
+  image.onerror = ()=>toast('Image read nahi ho payi.');
+  image.src = reader.result;
+ };
+
+ reader.readAsDataURL(file);
+});
+
+/* IMAGE URL PREVIEW */
+$('movieThumb').addEventListener('input',()=>{
+ const value = $('movieThumb').value.trim();
+
+ if(value){
+  selectedThumbnailData = '';
+  $('thumbPreview').src = value;
+  $('thumbPreview').classList.add('show');
+ }
+});
+
+/* BUTTON EVENTS */
+$('search').addEventListener('input',renderMovies);
+
+$('menuBtn').onclick = ()=>open('drawerWrap');
+$('closeDrawer').onclick = ()=>close('drawerWrap');
+
+$('drawerHome').onclick = ()=>{
+ close('drawerWrap');
+ returnHome();
+};
+
+$('drawerAdmin').onclick = ()=>{
+ close('drawerWrap');
+ open('adminOverlay');
+};
+
+$('saveMovie').onclick = saveMovie;
+$('resetForm').onclick = resetForm;
+
+$('cancelPreview').onclick = ()=>close('previewOverlay');
+
+$('confirmPlay').onclick = ()=>{
+ if(selectedMovieId) openWatchPage(selectedMovieId);
+};
+
+$('backHome').onclick = returnHome;
+
+$('enterSite').onclick = ()=>{
+ $('welcomeScreen').classList.add('hide');
+};
+
+document.querySelectorAll('[data-close]').forEach(button=>{
+ button.onclick = ()=>close(button.dataset.close);
+});
+
+document.querySelectorAll('.overlay').forEach(overlay=>{
+ overlay.addEventListener('click',event=>{
+  if(event.target===overlay) close(overlay.id);
+ });
+});
+
+window.addEventListener('popstate',renderWatchPage);
+
+/* WELCOME GREETING */
+function initWelcome(){
+ const hour = new Date().getHours();
+
+ $('welcomeGreeting').textContent =
+  hour<12 ? 'Good Morning!' :
+  hour<17 ? 'Good Afternoon!' :
+  hour<21 ? 'Good Evening!' :
+  'Welcome, Night Owl!';
+
+ $('welcomeMessage').textContent =
+  'Your next movie night starts here. Explore the latest additions.';
+
+ $('welcomeClock').textContent =
+  new Date().toLocaleDateString(undefined,{
+   weekday:'long',
+   day:'numeric',
+   month:'long'
+  });
+}
+
+initWelcome();
+loadMovies();
 </script>
+
 </body>
 </html>
