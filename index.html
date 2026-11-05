@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,7 +25,7 @@ footer a{color:#ff9800;text-decoration:none;font-weight:bold}
 #adminOpen{cursor:pointer}
 .modal{display:none;position:fixed;inset:0;background:#000b;z-index:1000;align-items:center;justify-content:center;padding:14px;overflow-y:auto}
 .modal.show{display:flex}
-.modal-box{background:white;width:100%;max-width:520px;padding:20px;border-radius:8px;max-height:92vh;overflow-y:auto;position:relative}
+.modal-box{background:white;width:100%;max-width:650px;padding:20px;border-radius:8px;max-height:92vh;overflow-y:auto;position:relative}
 .modal-box h2{margin:0 0 15px}
 .close{position:absolute;right:12px;top:8px;border:0;background:none;font-size:27px;cursor:pointer}
 .field{margin:12px 0}
@@ -36,12 +35,11 @@ footer a{color:#ff9800;text-decoration:none;font-weight:bold}
 .primary{background:#ff9800;color:#111}
 .dark{background:#222;color:white}
 .danger{background:#d32f2f;color:white}
-.success{background:#16843b;color:white}
 .preview-poster{width:100%;max-height:55vh;object-fit:contain;border:3px solid #ff9800;background:#eee}
 .preview-title{font-size:22px;font-weight:bold;margin:12px 0}
 .preview-date{color:#999;letter-spacing:2px}
 .admin-list-item{border:1px solid #ddd;padding:10px;margin:9px 0;display:flex;gap:10px;align-items:center}
-.admin-list-item img{width:55px;height:75px;object-fit:cover}
+.admin-list-item img{width:75px;height:100px;object-fit:cover}
 .admin-list-item .info{flex:1;min-width:0}
 .admin-list-item strong{overflow-wrap:anywhere}
 .status{font-size:12px;color:#16843b}
@@ -49,7 +47,7 @@ footer a{color:#ff9800;text-decoration:none;font-weight:bold}
 #watchPage{display:none;padding:12px}
 #playerFrame{width:100%;height:65vh;border:0;background:#000}
 .watch-title{font-size:22px;font-weight:bold;margin:12px 0}
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#222;color:white;padding:12px 18px;border-radius:5px;display:none;z-index:12000}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#222;color:white;padding:12px 18px;border-radius:5px;display:none;z-index:12000;max-width:90%;text-align:center}
 .legal-links{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;width:100%;margin-top:12px;padding-top:12px;border-top:1px solid #444}
 .legal-links a{color:#ff9800;text-decoration:none;font-size:13px;cursor:pointer}
 .legal-content{line-height:1.7;font-family:Arial,sans-serif;font-size:14px}
@@ -76,23 +74,22 @@ footer a{color:#ff9800;text-decoration:none;font-weight:bold}
 </head>
 <body>
 
-<!-- Visitor password screen -->
 <div id="passwordGate">
  <div class="password-box">
   <h2>SP MOVIES</h2>
   <p>Enter password to access the website</p>
   <form id="passwordForm">
-   <input type="password" id="sitePassword" placeholder="Enter website password" autocomplete="current-password" required>
+   <input type="password" id="sitePassword" placeholder="Enter website password" required>
    <button type="submit">ENTER WEBSITE</button>
   </form>
-  <p id="passwordError" aria-live="polite"></p>
+  <p id="passwordError"></p>
  </div>
 </div>
 
 <header>
  <div class="logo">SP MOVIES</div>
  <div class="header-actions">
-  <a href="https://jugadutech2026.blogspot.com" target="_blank" rel="noopener">Telegram Join</a>
+  <a href="https://t.me/jugaduBaba0" target="_blank" rel="noopener">Telegram Join</a>
  </div>
 </header>
 
@@ -106,7 +103,7 @@ footer a{color:#ff9800;text-decoration:none;font-weight:bold}
 <div id="watchPage">
  <button class="btn dark" onclick="goHome()">← Back to Movies</button>
  <h2 class="watch-title" id="watchTitle"></h2>
- <iframe id="playerFrame" allowfullscreen allow="autoplay; fullscreen; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" title="Movie player"></iframe>
+ <iframe id="playerFrame" allowfullscreen allow="autoplay; fullscreen; picture-in-picture" title="Movie player"></iframe>
 </div>
 
 <footer>
@@ -116,7 +113,7 @@ footer a{color:#ff9800;text-decoration:none;font-weight:bold}
   <span style="margin:0 7px;color:#777">|</span>
   <a id="adminOpen" onclick="openLogin()">Admin Panel</a>
  </div>
- <nav class="legal-links" aria-label="Legal pages">
+ <nav class="legal-links">
   <a onclick="openLegal('about')">About Us</a>
   <a onclick="openLegal('contact')">Contact Us</a>
   <a onclick="openLegal('disclaimer')">Disclaimer</a>
@@ -141,8 +138,10 @@ footer a{color:#ff9800;text-decoration:none;font-weight:bold}
  <div class="modal-box">
   <button class="close" onclick="closeModal('loginModal')">×</button>
   <h2>Admin Login</h2>
-  <div class="field"><label>Username</label><input id="loginUser" autocomplete="username" placeholder="Enter username"></div>
-  <div class="field"><label>Password</label><input id="loginPass" type="password" autocomplete="current-password" placeholder="Enter password"></div>
+  <div class="field">
+   <label>Admin Password</label>
+   <input id="loginPass" type="password" autocomplete="current-password" placeholder="Enter admin password">
+  </div>
   <button class="btn primary" onclick="loginAdmin()">Login</button>
   <p id="loginError" style="color:red"></p>
  </div>
@@ -154,15 +153,31 @@ footer a{color:#ff9800;text-decoration:none;font-weight:bold}
   <h2>SP Movies Admin Panel</h2>
   <form id="movieForm">
    <input type="hidden" id="editId">
-   <div class="field"><label>Movie Title</label><input id="movieTitle" required placeholder="Enter movie title"></div>
-   <div class="field"><label>Poster Image URL (optional)</label><input id="movieImage" type="url" placeholder="https://example.com/poster.jpg"></div>
-   <div class="field"><label>Or Upload Poster from Gallery</label><input id="movieFile" type="file" accept="image/*"></div>
-   <div class="field"><label>Embed Player URL</label><input id="movieEmbed" type="url" required placeholder="https://example.com/embed/..."></div>
-   <div class="field"><label>Publish Status</label><select id="movieStatus"><option value="true">Published</option><option value="false">Unpublished</option></select></div>
+   <div class="field">
+    <label>Movie Title</label>
+    <input id="movieTitle" required placeholder="Enter movie title">
+   </div>
+   <div class="field">
+    <label>Poster Image URL</label>
+    <input id="movieImage" type="url" required placeholder="https://example.com/poster.jpg">
+   </div>
+   <div class="field">
+    <label>Embed Player URL</label>
+    <input id="movieEmbed" type="url" required placeholder="https://example.com/embed/...">
+   </div>
+   <div class="field">
+    <label>Publish Status</label>
+    <select id="movieStatus">
+     <option value="true">Published</option>
+     <option value="false">Unpublished</option>
+    </select>
+   </div>
    <button class="btn primary" type="submit" id="saveBtn">Save Movie</button>
    <button class="btn dark" type="button" onclick="resetForm()">Clear</button>
   </form>
-  <hr><h3>Manage Movies</h3><div id="adminMovieList"></div>
+  <hr>
+  <h3>Manage Movies</h3>
+  <div id="adminMovieList">Loading...</div>
   <button class="btn danger" onclick="logoutAdmin()">Logout</button>
  </div>
 </div>
@@ -174,43 +189,45 @@ footer a{color:#ff9800;text-decoration:none;font-weight:bold}
  </div>
 </div>
 
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="toast" id="toast"></div>
+
 <script>
-const STORAGE_KEY = "spmovies_embed_catalog_v2";
+const API_URL = "https://spmovies-api.goadparas2.workers.dev";
 const WEBSITE_PASSWORD = "jugad";
+const ADMIN_KEY = "spmovies_admin_password";
+
 let movies = [];
 let selectedMovieId = null;
-let selectedPosterData = "";
 let adminLoggedIn = false;
+
 const $ = id => document.getElementById(id);
 
-function loadMovies(){
- try{
-  movies = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-  if(!Array.isArray(movies)) movies = [];
- }catch(e){movies=[]}
-}
-function saveMovies(){
- try{localStorage.setItem(STORAGE_KEY,JSON.stringify(movies));return true}
- catch(e){showToast("Storage full! Please use a smaller poster.");return false}
-}
 function showToast(message){
- const t=$("toast");t.textContent=message;t.style.display="block";
- clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>t.style.display="none",2600);
+ const t=$("toast");
+ t.textContent=message;
+ t.style.display="block";
+ clearTimeout(showToast.timer);
+ showToast.timer=setTimeout(()=>t.style.display="none",3000);
 }
+
 function openModal(id){$(id).classList.add("show")}
 function closeModal(id){$(id).classList.remove("show")}
+
 function escapeHTML(value){
- return String(value ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+ return String(value ?? "").replace(/[&<>"']/g,c=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ }[c]));
 }
+
 function validURL(value){
- try{const u=new URL(value);return u.protocol==="https:"||u.protocol==="http:"}
- catch(e){return false}
+ try{
+  const u=new URL(value);
+  return u.protocol==="https:"||u.protocol==="http:";
+ }catch(e){return false}
 }
 
 function unlockWebsite(){
- const entered=$("sitePassword").value;
- if(entered===WEBSITE_PASSWORD){
+ if($("sitePassword").value===WEBSITE_PASSWORD){
   sessionStorage.setItem("spmovies_access","yes");
   $("passwordGate").style.display="none";
   $("passwordError").textContent="";
@@ -219,166 +236,392 @@ function unlockWebsite(){
   $("sitePassword").value="";
  }
 }
-$("passwordForm").addEventListener("submit",function(e){e.preventDefault();unlockWebsite()});
+
+$("passwordForm").addEventListener("submit",function(e){
+ e.preventDefault();
+ unlockWebsite();
+});
+
 function checkWebsitePassword(){
- if(sessionStorage.getItem("spmovies_access")==="yes")$("passwordGate").style.display="none";
- else $("passwordGate").style.display="flex";
+ $("passwordGate").style.display=
+  sessionStorage.getItem("spmovies_access")==="yes"?"none":"flex";
+}
+
+function formatDate(value){
+ if(!value)return "";
+ const d=new Date(value);
+ if(Number.isNaN(d.getTime()))return String(value);
+ return d.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}).toUpperCase();
+}
+
+function normalizeMovie(m){
+ return {
+  id:String(m.id),
+  title:m.title||"",
+  poster:m.poster_url||m.poster||"",
+  embed:m.embed_url||m.embed||"",
+  published:Number(m.published)===1||m.published===true,
+  date:formatDate(m.release_date||m.created_at||m.date)
+ };
+}
+
+async function apiRequest(path,options={}){
+ const headers={"Content-Type":"application/json",...(options.headers||{})};
+ const adminPassword=sessionStorage.getItem(ADMIN_KEY);
+ if(adminPassword)headers["X-Admin-Password"]=adminPassword;
+
+ const response=await fetch(API_URL+path,{...options,headers});
+ let data;
+ try{data=await response.json()}catch(e){throw new Error("Invalid server response")}
+
+ if(!response.ok){
+  throw new Error(data.error||("Request failed: "+response.status));
+ }
+ return data;
+}
+
+async function loadMovies(){
+ $("movieGrid").innerHTML='<div class="empty">Loading movies...</div>';
+ try{
+  const data=await apiRequest("/api/movies");
+  movies=Array.isArray(data)?data.map(normalizeMovie):[];
+  renderMovies();
+ }catch(error){
+  $("movieGrid").innerHTML='<div class="empty">Movies could not be loaded. Please refresh.</div>';
+  console.error(error);
+ }
 }
 
 function renderMovies(){
  const grid=$("movieGrid");
  const query=$("search").value.trim().toLowerCase();
- const visible=movies.filter(m=>m.published&&(m.title||"").toLowerCase().includes(query));
- if(!visible.length){grid.innerHTML='<div class="empty">No movies found.</div>';return}
+ const visible=movies.filter(m=>m.published&&m.title.toLowerCase().includes(query));
+
+ if(!visible.length){
+  grid.innerHTML='<div class="empty">No movies found.</div>';
+  return;
+ }
+
  grid.innerHTML=visible.map(m=>`
   <article class="movie-card" onclick="openPreview('${escapeHTML(m.id)}')">
-   <img class="poster" src="${escapeHTML(m.poster)}" alt="${escapeHTML(m.title)}" loading="lazy"
-    onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22280%22%3E%3Crect width=%22100%25%22 height=%22100%25%22 fill=%22%23eee%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 fill=%22%23777%22 font-size=%2216%22%3ENo Poster%3C/text%3E%3C/svg%3E'">
-   <div class="movie-date">${escapeHTML(m.date||"")}</div>
+   <img class="poster" src="${escapeHTML(m.poster)}" alt="${escapeHTML(m.title)}" loading="lazy">
+   <div class="movie-date">${escapeHTML(m.date)}</div>
    <h3 class="movie-title">${escapeHTML(m.title)}</h3>
-  </article>`).join("");
+  </article>
+ `).join("");
 }
+
 function openPreview(id){
- const movie=movies.find(m=>m.id===id&&m.published);if(!movie)return;
- selectedMovieId=id;$("previewPoster").src=movie.poster;
- $("previewTitle").textContent=movie.title;$("previewDate").textContent=movie.date||"";
+ const movie=movies.find(m=>m.id===id&&m.published);
+ if(!movie)return;
+ selectedMovieId=id;
+ $("previewPoster").src=movie.poster;
+ $("previewTitle").textContent=movie.title;
+ $("previewDate").textContent=movie.date;
  openModal("previewModal");
 }
+
 function playSelected(){
- const movie=movies.find(m=>m.id===selectedMovieId);if(!movie)return;
- closeModal("previewModal");$("homePage").style.display="none";
- $("watchPage").style.display="block";$("watchTitle").textContent=movie.title;
+ const movie=movies.find(m=>m.id===selectedMovieId);
+ if(!movie)return;
+ closeModal("previewModal");
+ $("homePage").style.display="none";
+ $("watchPage").style.display="block";
+ $("watchTitle").textContent=movie.title;
  $("playerFrame").src=movie.embed;
  history.pushState({watch:movie.id},"","?watch="+encodeURIComponent(movie.id));
  window.scrollTo(0,0);
 }
+
 function goHome(){
- $("playerFrame").src="about:blank";$("watchPage").style.display="none";
- $("homePage").style.display="block";history.pushState({},"",location.pathname);
+ $("playerFrame").src="about:blank";
+ $("watchPage").style.display="none";
+ $("homePage").style.display="block";
+ history.pushState({},"",location.pathname);
  renderMovies();
+}async function openLogin(){
+ if(adminLoggedIn){
+  await openAdminPanel();
+  return;
+ }
+ $("loginPass").value="";
+ $("loginError").textContent="";
+ openModal("loginModal");
 }
-function openLogin(){
- if(adminLoggedIn){renderAdminList();openModal("adminModal")}
- else{$("loginUser").value="";$("loginPass").value="";$("loginError").textContent="";openModal("loginModal")}
+
+async function loginAdmin(){
+ const password=$("loginPass").value;
+ if(!password){
+  $("loginError").textContent="Enter admin password";
+  return;
+ }
+
+ try{
+  await apiRequest("/api/login",{
+   method:"POST",
+   body:JSON.stringify({password})
+  });
+
+  sessionStorage.setItem(ADMIN_KEY,password);
+  adminLoggedIn=true;
+  closeModal("loginModal");
+  showToast("Admin login successful");
+  await openAdminPanel();
+ }catch(error){
+  $("loginError").textContent=error.message;
+ }
 }
-function loginAdmin(){
- if($("loginUser").value==="@Ad"&&$("loginPass").value==="@9376"){
-  adminLoggedIn=true;closeModal("loginModal");renderAdminList();openModal("adminModal");showToast("Admin login successful");
- }else{$("loginError").textContent="Incorrect username or password"}
+
+async function openAdminPanel(){
+ try{
+  await loadAdminMovies();
+  openModal("adminModal");
+ }catch(error){
+  showToast(error.message);
+  sessionStorage.removeItem(ADMIN_KEY);
+  adminLoggedIn=false;
+ }
 }
-function closeAdmin(){closeModal("adminModal");resetForm()}
-function logoutAdmin(){adminLoggedIn=false;closeAdmin();showToast("Logged out")}
+
+async function loadAdminMovies(){
+ const data=await apiRequest("/api/admin/movies");
+ movies=Array.isArray(data)?data.map(normalizeMovie):[];
+ renderMovies();
+ renderAdminList();
+}
+
+function closeAdmin(){
+ closeModal("adminModal");
+ resetForm();
+}
+
+function logoutAdmin(){
+ sessionStorage.removeItem(ADMIN_KEY);
+ adminLoggedIn=false;
+ closeAdmin();
+ showToast("Logged out");
+}
+
 function resetForm(){
- $("movieForm").reset();$("editId").value="";$("movieFile").value="";
- selectedPosterData="";$("saveBtn").textContent="Save Movie";
+ $("movieForm").reset();
+ $("editId").value="";
+ $("saveBtn").textContent="Save Movie";
 }
-function readPosterFile(file){
- return new Promise((resolve,reject)=>{
-  if(!file){resolve("");return}
-  if(!file.type.startsWith("image/")){reject(new Error("Please select an image"));return}
-  const reader=new FileReader();
-  reader.onload=()=>{
-   const img=new Image();
-   img.onload=()=>{
-    const ratio=Math.min(1,600/img.width,900/img.height);
-    const w=Math.round(img.width*ratio),h=Math.round(img.height*ratio);
-    const canvas=document.createElement("canvas");canvas.width=w;canvas.height=h;
-    canvas.getContext("2d").drawImage(img,0,0,w,h);
-    resolve(canvas.toDataURL("image/jpeg",.78));
-   };
-   img.onerror=()=>reject(new Error("Image could not be loaded"));img.src=reader.result;
-  };
-  reader.onerror=()=>reject(new Error("File could not be read"));reader.readAsDataURL(file);
- });
-}
+
 $("movieForm").addEventListener("submit",async function(e){
  e.preventDefault();
- if(!adminLoggedIn){showToast("Please login first");return}
- const title=$("movieTitle").value.trim(),imageURL=$("movieImage").value.trim();
- const embed=$("movieEmbed").value.trim(),file=$("movieFile").files[0],editId=$("editId").value;
- if(!title){showToast("Enter movie title");return}
- if(!validURL(embed)){showToast("Enter a valid embed URL");return}
- if(imageURL&&!validURL(imageURL)){showToast("Enter a valid poster URL");return}
- const existing=movies.find(m=>m.id===editId);
- let poster=selectedPosterData||(existing?existing.poster:"");
- if(file){try{poster=await readPosterFile(file)}catch(err){showToast(err.message);return}}
- else if(imageURL)poster=imageURL;
- if(!poster){showToast("Please add a poster image");return}
- const movie={
-  id:editId||("sp_"+Date.now()+"_"+Math.random().toString(36).slice(2,7)),
-  title,poster,embed,published:$("movieStatus").value==="true",
-  date:existing?existing.date:new Date().toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}).toUpperCase()
+
+ if(!adminLoggedIn){
+  showToast("Please login first");
+  return;
+ }
+
+ const id=$("editId").value;
+ const title=$("movieTitle").value.trim();
+ const poster=$("movieImage").value.trim();
+ const embed=$("movieEmbed").value.trim();
+ const published=$("movieStatus").value==="true";
+
+ if(!title||!poster||!embed){
+  showToast("Please fill all fields");
+  return;
+ }
+
+ if(!validURL(poster)||!validURL(embed)){
+  showToast("Enter valid image and embed URLs");
+  return;
+ }
+
+ const body={
+  title:title,
+  poster_url:poster,
+  embed_url:embed,
+  published:published
  };
- if(editId){const index=movies.findIndex(m=>m.id===editId);if(index!==-1)movies[index]=movie}
- else movies.unshift(movie);
- if(!saveMovies())return;
- resetForm();renderMovies();renderAdminList();showToast(editId?"Movie updated":"Movie saved");
+
+ const saveBtn=$("saveBtn");
+ saveBtn.disabled=true;
+ saveBtn.textContent="Saving...";
+
+ try{
+  if(id){
+   await apiRequest("/api/movies/"+encodeURIComponent(id),{
+    method:"PUT",
+    body:JSON.stringify(body)
+   });
+   showToast("Movie updated successfully");
+  }else{
+   await apiRequest("/api/movies",{
+    method:"POST",
+    body:JSON.stringify(body)
+   });
+   showToast("Movie added successfully");
+  }
+
+  resetForm();
+  await loadAdminMovies();
+
+ }catch(error){
+  showToast(error.message);
+ }finally{
+  saveBtn.disabled=false;
+  saveBtn.textContent=id?"Update Movie":"Save Movie";
+ }
 });
+
 function renderAdminList(){
  if(!adminLoggedIn)return;
+
  const list=$("adminMovieList");
- if(!movies.length){list.innerHTML="<p>No movies added yet.</p>";return}
+
+ if(!movies.length){
+  list.innerHTML="<p>No movies added yet.</p>";
+  return;
+ }
+
  list.innerHTML=movies.map(m=>`
   <div class="admin-list-item">
    <img src="${escapeHTML(m.poster)}" alt="">
-   <div class="info"><strong>${escapeHTML(m.title)}</strong>
-    <div class="status ${m.published?"":"off"}">${m.published?"Published":"Unpublished"}</div>
+   <div class="info">
+    <strong>${escapeHTML(m.title)}</strong>
+    <div class="status ${m.published?"":"off"}">
+     ${m.published?"Published":"Unpublished"}
+    </div>
     <button class="btn primary" onclick="editMovie('${escapeHTML(m.id)}')">Edit</button>
-    <button class="btn dark" onclick="togglePublish('${escapeHTML(m.id)}')">${m.published?"Unpublish":"Publish"}</button>
+    <button class="btn dark" onclick="togglePublish('${escapeHTML(m.id)}')">
+     ${m.published?"Unpublish":"Publish"}
+    </button>
     <button class="btn danger" onclick="deleteMovie('${escapeHTML(m.id)}')">Delete</button>
    </div>
-  </div>`).join("");
+  </div>
+ `).join("");
 }
+
 function editMovie(id){
- if(!adminLoggedIn)return;const m=movies.find(x=>x.id===id);if(!m)return;
- $("editId").value=m.id;$("movieTitle").value=m.title;$("movieImage").value="";
- $("movieEmbed").value=m.embed;$("movieStatus").value=String(m.published);
- $("movieFile").value="";selectedPosterData=m.poster;$("saveBtn").textContent="Update Movie";
+ if(!adminLoggedIn)return;
+
+ const m=movies.find(x=>x.id===id);
+ if(!m)return;
+
+ $("editId").value=m.id;
+ $("movieTitle").value=m.title;
+ $("movieImage").value=m.poster;
+ $("movieEmbed").value=m.embed;
+ $("movieStatus").value=String(m.published);
+
+ $("saveBtn").textContent="Update Movie";
  $("movieTitle").scrollIntoView({behavior:"smooth",block:"center"});
 }
-function togglePublish(id){
- if(!adminLoggedIn)return;const m=movies.find(x=>x.id===id);if(!m)return;
- m.published=!m.published;
- if(saveMovies()){renderMovies();renderAdminList();showToast(m.published?"Movie published":"Movie unpublished")}
+
+async function togglePublish(id){
+ if(!adminLoggedIn)return;
+
+ const m=movies.find(x=>x.id===id);
+ if(!m)return;
+
+ try{
+  await apiRequest("/api/movies/"+encodeURIComponent(id),{
+   method:"PUT",
+   body:JSON.stringify({
+    title:m.title,
+    poster_url:m.poster,
+    embed_url:m.embed,
+    published:!m.published
+   })
+  });
+
+  await loadAdminMovies();
+  showToast(m.published?"Movie unpublished":"Movie published");
+ }catch(error){
+  showToast(error.message);
+ }
 }
-function deleteMovie(id){
- if(!adminLoggedIn)return;const m=movies.find(x=>x.id===id);if(!m)return;
+
+async function deleteMovie(id){
+ if(!adminLoggedIn)return;
+
+ const m=movies.find(x=>x.id===id);
+ if(!m)return;
+
  if(!confirm("Delete "+m.title+"?"))return;
- movies=movies.filter(x=>x.id!==id);
- if(saveMovies()){renderMovies();renderAdminList();showToast("Movie deleted")}
+
+ try{
+  await apiRequest("/api/movies/"+encodeURIComponent(id),{
+   method:"DELETE"
+  });
+
+  await loadAdminMovies();
+  showToast("Movie deleted successfully");
+ }catch(error){
+  showToast(error.message);
+ }
 }
 
 const legalPages={
- about:`<h2>About SP Movies</h2><p>SP Movies is a movie catalogue website designed to help visitors browse movie listings and access movie-related information.</p><p>Website features and listings may change over time. SP Movies does not claim ownership of third-party material unless expressly stated.</p>`,
- contact:`<h2>Contact Us</h2><p>For general questions, technical issues, copyright concerns or other enquiries, contact the website administrator.</p><p><strong>Contact email:</strong> [Add your working contact email here]</p><p>Replace this placeholder with an email address that you actively monitor before publishing the website.</p>`,
- disclaimer:`<h2>Disclaimer</h2><p>Information on SP Movies is provided for general informational and catalogue purposes. Movie titles, descriptions, artwork, ratings and other details may be supplied by third-party sources.</p><p>SP Movies does not represent that it owns or licenses third-party films, artwork or other copyrighted material unless specifically stated.</p><p>External links and embedded players may be hosted and controlled by third parties. We do not control their content, availability, security or privacy practices.</p><p>Visitors are responsible for ensuring that their access to and use of external content complies with applicable laws and the terms of the relevant services.</p><p>If you believe material accessible through this website infringes your rights, please contact us with the relevant URL and supporting information.</p>`,
- privacy:`<h2>Privacy Policy</h2><p>This website may store limited information in your browser, including a temporary website access session and locally stored catalogue data.</p><p>The current standalone version does not include a visitor account system or a server-side visitor database. If analytics, advertising, cookies or other third-party services are added later, this policy should be updated to describe them accurately.</p><p>Third-party websites and embedded players may collect information under their own privacy policies. Please review those policies before using external services.</p><p>Contact: [Add your working contact email here]</p>`,
- terms:`<h2>Terms &amp; Conditions</h2><p>By using SP Movies, you agree to use the website lawfully and responsibly.</p><ul><li>Do not use the website for unlawful activity.</li><li>Do not attempt to disrupt, damage or gain unauthorised access to the website.</li><li>External links and embedded players are third-party services and may have separate terms.</li><li>Website information and features may change or be removed.</li></ul><p>You are responsible for complying with applicable laws when accessing external content.</p>`,
- dmca:`<h2>DMCA / Copyright Policy</h2><p>SP Movies respects intellectual property rights and will review properly submitted copyright complaints.</p><p>If you are a copyright owner or authorised representative and believe content accessible through this website infringes your rights, please send a notice containing:</p><ul><li>Your name and contact information.</li><li>Identification of the copyrighted work.</li><li>The exact URL of the allegedly infringing material.</li><li>A statement explaining your ownership or authority to act.</li><li>A statement that the information in your notice is accurate.</li></ul><p>Send notices to: [Add your working contact email here]</p><p>We will review complete notices and take appropriate action where warranted. Do not submit false or misleading claims.</p>`
+ about:`<h2>About SP Movies</h2>
+ <p>SP Movies is a movie catalogue website designed to help visitors browse movie listings and access movie-related information.</p>
+ <p>SP Movies does not claim ownership of third-party material unless expressly stated.</p>`,
+
+ contact:`<h2>Contact Us</h2>
+ <p>For general questions, technical issues or copyright concerns, contact the website administrator.</p>
+ <p><strong>Contact email:</strong> Add your working email address here.</p>`,
+
+ disclaimer:`<h2>Disclaimer</h2>
+ <p>Information on SP Movies is provided for general informational and catalogue purposes.</p>
+ <p>External links and embedded players may be hosted and controlled by third parties. We do not control their content, availability or privacy practices.</p>
+ <p>Visitors are responsible for ensuring that their use of external content complies with applicable laws.</p>`,
+
+ privacy:`<h2>Privacy Policy</h2>
+ <p>This website may store limited information in your browser, including a temporary website access session.</p>
+ <p>Third-party websites and embedded players may collect information under their own privacy policies.</p>
+ <p>Contact: Add your working email address here.</p>`,
+
+ terms:`<h2>Terms &amp; Conditions</h2>
+ <p>By using SP Movies, you agree to use the website lawfully and responsibly.</p>
+ <ul>
+  <li>Do not use the website for unlawful activity.</li>
+  <li>Do not attempt to disrupt or gain unauthorised access to the website.</li>
+  <li>External links and embedded players may have separate terms.</li>
+ </ul>`,
+
+ dmca:`<h2>DMCA / Copyright Policy</h2>
+ <p>SP Movies respects intellectual property rights and will review properly submitted copyright complaints.</p>
+ <p>Send your name, contact information, copyrighted work details and the exact URL of the allegedly infringing material.</p>
+ <p>Contact email: Add your working email address here.</p>`
 };
+
 function openLegal(page){
- const content=legalPages[page];if(!content)return;
- $("legalContent").innerHTML=content;openModal("legalModal");
+ const content=legalPages[page];
+ if(!content)return;
+ $("legalContent").innerHTML=content;
+ openModal("legalModal");
 }
 
 $("year").textContent=new Date().getFullYear();
-loadMovies();
-renderMovies();
-checkWebsitePassword();
 
-/* Handle browser back/forward for movie watch links */
+checkWebsitePassword();
+loadMovies();
+
 window.addEventListener("popstate",function(){
  const id=new URLSearchParams(location.search).get("watch");
+
  if(id){
   const movie=movies.find(m=>m.id===id&&m.published);
+
   if(movie){
-   $("homePage").style.display="none";$("watchPage").style.display="block";
-   $("watchTitle").textContent=movie.title;$("playerFrame").src=movie.embed;return;
+   $("homePage").style.display="none";
+   $("watchPage").style.display="block";
+   $("watchTitle").textContent=movie.title;
+   $("playerFrame").src=movie.embed;
+   return;
   }
  }
- $("playerFrame").src="about:blank";$("watchPage").style.display="none";$("homePage").style.display="block";
+
+ $("playerFrame").src="about:blank";
+ $("watchPage").style.display="none";
+ $("homePage").style.display="block";
+ renderMovies();
 });
 </script>
 </body>
 </html>
-
