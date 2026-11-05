@@ -227,9 +227,13 @@ function openModal(id){$(id).classList.add("show")}
 function closeModal(id){$(id).classList.remove("show")}
 
 function escapeHTML(value){
- return String(value ?? "").replace(/[&<>"']/g,c=>({
-  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;',"\'":"&#39;"
- }[c]));
+ return String(value ?? "").replace(/[&<>"']/g,c=>{
+  if(c==="&")return "&amp;";
+  if(c==="<")return "&lt;";
+  if(c===">")return "&gt;";
+  if(c==='"')return "&quot;";
+  return "&#39;";
+ });
 }
 
 function validURL(value){
@@ -704,7 +708,6 @@ document.querySelectorAll("[data-legal]").forEach(link=>{
 /* Start website */
 $("year").textContent=new Date().getFullYear();
 checkWebsitePassword();
-loadMovies();
 
 /* Handle direct watch links and browser back/forward */
 function handleWatchRoute(){
@@ -728,12 +731,12 @@ function handleWatchRoute(){
 
 window.addEventListener("popstate",handleWatchRoute);
 
-/* Check route again after database movies load */
-const originalLoadMovies=loadMovies;
-loadMovies=async function(){
- await originalLoadMovies();
+/* Load movies first, then handle a direct watch link */
+async function startWebsite(){
+ await loadMovies();
  handleWatchRoute();
-};
+}
+startWebsite();
 </script>
 </body>
 </html>
