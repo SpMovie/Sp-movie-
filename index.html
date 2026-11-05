@@ -5,131 +5,61 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SP Movies</title>
-
 <style>
 *{box-sizing:border-box}
-body{
- margin:0;
- background:#fff;
- color:#111;
- font-family:Georgia,'Times New Roman',serif;
-}
-header{
- background:#111;
- color:white;
- padding:16px 12px;
- display:flex;
- align-items:center;
- justify-content:space-between;
- gap:10px;
-}
+body{margin:0;background:#fff;color:#111;font-family:Georgia,'Times New Roman',serif}
+header{background:#111;color:white;padding:16px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px}
 .logo{font-size:25px;font-weight:bold;letter-spacing:1px}
 .header-actions{display:flex;gap:8px;align-items:center}
-.header-actions a{
- background:#ff9800;color:#111;text-decoration:none;
- padding:9px 12px;border-radius:4px;font-weight:bold;
- font-size:13px;
-}
+.header-actions a{background:#ff9800;color:#111;text-decoration:none;padding:9px 12px;border-radius:4px;font-weight:bold;font-size:13px}
 .search-wrap{padding:14px 10px}
-#search{
- width:100%;padding:12px;border:1px solid #ccc;
- border-radius:5px;font-size:16px;outline:none;
-}
+#search{width:100%;padding:12px;border:1px solid #ccc;border-radius:5px;font-size:16px;outline:none}
 .container{padding:5px 8px 25px}
-.movie-grid{
- display:grid;
- grid-template-columns:repeat(4,minmax(0,1fr));
- gap:24px 18px;
-}
+.movie-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px 18px}
 .movie-card{min-width:0;text-align:center;cursor:pointer}
-.poster{
- width:100%;aspect-ratio:0.70;object-fit:cover;
- border:3px solid #ff9800;
- border-radius:3px;
- box-shadow:7px 9px 13px #888;
- display:block;
- background:#eee;
-}
-.movie-date{
- color:#aaa;font-size:14px;letter-spacing:3px;
- margin:26px 0 10px;text-transform:uppercase;
-}
-.movie-title{
- font-size:21px;font-weight:bold;line-height:1.18;
- margin:0 0 12px;overflow-wrap:anywhere;
-}
-.empty{
- text-align:center;padding:35px 10px;color:#777;
- grid-column:1/-1;
-}
-footer{
- margin-top:25px;background:#111;color:#ddd;
- padding:18px 12px;display:flex;
- align-items:center;justify-content:space-between;
- gap:10px;font-family:Arial,sans-serif;
-}
+.poster{width:100%;aspect-ratio:.70;object-fit:cover;border:3px solid #ff9800;border-radius:3px;box-shadow:7px 9px 13px #888;display:block;background:#eee}
+.movie-date{color:#aaa;font-size:14px;letter-spacing:3px;margin:26px 0 10px;text-transform:uppercase}
+.movie-title{font-size:21px;font-weight:bold;line-height:1.18;margin:0 0 12px;overflow-wrap:anywhere}
+.empty{text-align:center;padding:35px 10px;color:#777;grid-column:1/-1}
+footer{margin-top:25px;background:#111;color:#ddd;padding:18px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;font-family:Arial,sans-serif}
 footer a{color:#ff9800;text-decoration:none;font-weight:bold}
 #adminOpen{cursor:pointer}
-
-/* Modal */
-.modal{
- display:none;position:fixed;inset:0;background:#000b;
- z-index:1000;align-items:center;justify-content:center;
- padding:14px;overflow-y:auto;
-}
+.modal{display:none;position:fixed;inset:0;background:#000b;z-index:1000;align-items:center;justify-content:center;padding:14px;overflow-y:auto}
 .modal.show{display:flex}
-.modal-box{
- background:white;width:100%;max-width:520px;
- padding:20px;border-radius:8px;max-height:92vh;
- overflow-y:auto;position:relative;
-}
+.modal-box{background:white;width:100%;max-width:520px;padding:20px;border-radius:8px;max-height:92vh;overflow-y:auto;position:relative}
 .modal-box h2{margin:0 0 15px}
-.close{
- position:absolute;right:12px;top:8px;
- border:0;background:none;font-size:27px;cursor:pointer;
-}
+.close{position:absolute;right:12px;top:8px;border:0;background:none;font-size:27px;cursor:pointer}
 .field{margin:12px 0}
 .field label{display:block;font-weight:bold;margin-bottom:5px}
-.field input,.field textarea,.field select{
- width:100%;padding:11px;border:1px solid #ccc;
- border-radius:4px;font-size:15px;
-}
-.btn{
- border:0;padding:11px 15px;border-radius:4px;
- cursor:pointer;font-weight:bold;margin:4px 2px;
-}
+.field input,.field textarea,.field select{width:100%;padding:11px;border:1px solid #ccc;border-radius:4px;font-size:15px}
+.btn{border:0;padding:11px 15px;border-radius:4px;cursor:pointer;font-weight:bold;margin:4px 2px}
 .primary{background:#ff9800;color:#111}
 .dark{background:#222;color:white}
 .danger{background:#d32f2f;color:white}
 .success{background:#16843b;color:white}
-.preview-poster{
- width:100%;max-height:55vh;object-fit:contain;
- border:3px solid #ff9800;background:#eee;
-}
+.preview-poster{width:100%;max-height:55vh;object-fit:contain;border:3px solid #ff9800;background:#eee}
 .preview-title{font-size:22px;font-weight:bold;margin:12px 0}
 .preview-date{color:#999;letter-spacing:2px}
-.admin-list-item{
- border:1px solid #ddd;padding:10px;margin:9px 0;
- display:flex;gap:10px;align-items:center;
-}
-.admin-list-item img{
- width:55px;height:75px;object-fit:cover;
-}
+.admin-list-item{border:1px solid #ddd;padding:10px;margin:9px 0;display:flex;gap:10px;align-items:center}
+.admin-list-item img{width:55px;height:75px;object-fit:cover}
 .admin-list-item .info{flex:1;min-width:0}
 .admin-list-item strong{overflow-wrap:anywhere}
 .status{font-size:12px;color:#16843b}
 .status.off{color:#d32f2f}
 #watchPage{display:none;padding:12px}
-#playerFrame{
- width:100%;height:65vh;border:0;background:#000;
-}
+#playerFrame{width:100%;height:65vh;border:0;background:#000}
 .watch-title{font-size:22px;font-weight:bold;margin:12px 0}
-.toast{
- position:fixed;bottom:20px;left:50%;
- transform:translateX(-50%);background:#222;color:white;
- padding:12px 18px;border-radius:5px;display:none;
- z-index:2000;
-}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#222;color:white;padding:12px 18px;border-radius:5px;display:none;z-index:12000}
+.legal-links{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;width:100%;margin-top:12px;padding-top:12px;border-top:1px solid #444}
+.legal-links a{color:#ff9800;text-decoration:none;font-size:13px;cursor:pointer}
+.legal-content{line-height:1.7;font-family:Arial,sans-serif;font-size:14px}
+.legal-content h2{padding-right:25px}
+#passwordGate{position:fixed;inset:0;background:#111;z-index:11000;display:flex;align-items:center;justify-content:center;padding:20px}
+.password-box{background:white;padding:28px 22px;width:100%;max-width:380px;text-align:center;border-radius:8px}
+.password-box h2{margin-top:0}
+.password-box input{width:100%;padding:13px;margin:12px 0;border:1px solid #ccc;border-radius:5px;font-size:16px}
+.password-box button{width:100%;padding:13px;background:#ff9800;border:0;border-radius:5px;font-weight:bold;cursor:pointer}
+#passwordError{color:red;font-size:14px}
 @media(max-width:700px){
  .movie-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 14px}
  .movie-title{font-size:18px}
@@ -144,47 +74,58 @@ footer a{color:#ff9800;text-decoration:none;font-weight:bold}
 }
 </style>
 </head>
-
 <body>
+
+<!-- Visitor password screen -->
+<div id="passwordGate">
+ <div class="password-box">
+  <h2>SP MOVIES</h2>
+  <p>Enter password to access the website</p>
+  <form id="passwordForm">
+   <input type="password" id="sitePassword" placeholder="Enter website password" autocomplete="current-password" required>
+   <button type="submit">ENTER WEBSITE</button>
+  </form>
+  <p id="passwordError" aria-live="polite"></p>
+ </div>
+</div>
 
 <header>
  <div class="logo">SP MOVIES</div>
  <div class="header-actions">
-  <a href="https://jugadutech2026.blogspot.com"
-     target="_blank" rel="noopener">Telegram Join</a>
+  <a href="https://jugadutech2026.blogspot.com" target="_blank" rel="noopener">Telegram Join</a>
  </div>
 </header>
 
 <div id="homePage">
  <div class="search-wrap">
-  <input id="search" type="search"
-   placeholder="Search Movies..." oninput="renderMovies()">
+  <input id="search" type="search" placeholder="Search Movies..." oninput="renderMovies()">
  </div>
-
- <main class="container">
-  <div class="movie-grid" id="movieGrid"></div>
- </main>
+ <main class="container"><div class="movie-grid" id="movieGrid"></div></main>
 </div>
 
 <div id="watchPage">
  <button class="btn dark" onclick="goHome()">← Back to Movies</button>
  <h2 class="watch-title" id="watchTitle"></h2>
- <iframe id="playerFrame" allowfullscreen
-  allow="autoplay; fullscreen; picture-in-picture"
-  referrerpolicy="strict-origin-when-cross-origin"></iframe>
+ <iframe id="playerFrame" allowfullscreen allow="autoplay; fullscreen; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" title="Movie player"></iframe>
 </div>
 
 <footer>
  <div>© <span id="year"></span> SP Movies</div>
  <div>
-  <a href="https://t.me/jugaduBaba0"
-   target="_blank" rel="noopener">Telegram Join</a>
+  <a href="https://t.me/jugaduBaba0" target="_blank" rel="noopener">Telegram Join</a>
   <span style="margin:0 7px;color:#777">|</span>
   <a id="adminOpen" onclick="openLogin()">Admin Panel</a>
  </div>
+ <nav class="legal-links" aria-label="Legal pages">
+  <a onclick="openLegal('about')">About Us</a>
+  <a onclick="openLegal('contact')">Contact Us</a>
+  <a onclick="openLegal('disclaimer')">Disclaimer</a>
+  <a onclick="openLegal('privacy')">Privacy Policy</a>
+  <a onclick="openLegal('terms')">Terms &amp; Conditions</a>
+  <a onclick="openLegal('dmca')">DMCA / Copyright</a>
+ </nav>
 </footer>
 
-<!-- Movie Preview -->
 <div class="modal" id="previewModal">
  <div class="modal-box" style="text-align:center">
   <button class="close" onclick="closeModal('previewModal')">×</button>
@@ -196,86 +137,51 @@ footer a{color:#ff9800;text-decoration:none;font-weight:bold}
  </div>
 </div>
 
-<!-- Admin Login -->
 <div class="modal" id="loginModal">
  <div class="modal-box">
   <button class="close" onclick="closeModal('loginModal')">×</button>
   <h2>Admin Login</h2>
-  <div class="field">
-   <label>Username</label>
-   <input id="loginUser" autocomplete="username"
-    placeholder="Enter username">
-  </div>
-  <div class="field">
-   <label>Password</label>
-   <input id="loginPass" type="password"
-    autocomplete="current-password" placeholder="Enter password">
-  </div>
+  <div class="field"><label>Username</label><input id="loginUser" autocomplete="username" placeholder="Enter username"></div>
+  <div class="field"><label>Password</label><input id="loginPass" type="password" autocomplete="current-password" placeholder="Enter password"></div>
   <button class="btn primary" onclick="loginAdmin()">Login</button>
   <p id="loginError" style="color:red"></p>
  </div>
 </div>
 
-<!-- Admin Panel -->
 <div class="modal" id="adminModal">
  <div class="modal-box">
   <button class="close" onclick="closeAdmin()">×</button>
   <h2>SP Movies Admin Panel</h2>
-
   <form id="movieForm">
    <input type="hidden" id="editId">
-
-   <div class="field">
-    <label>Movie Title</label>
-    <input id="movieTitle" required placeholder="Enter movie title">
-   </div>
-
-   <div class="field">
-    <label>Poster Image URL (optional)</label>
-    <input id="movieImage" type="url"
-     placeholder="https://example.com/poster.jpg">
-   </div>
-
-   <div class="field">
-    <label>Or Upload Poster from Gallery</label>
-    <input id="movieFile" type="file" accept="image/*">
-   </div>
-
-   <div class="field">
-    <label>Embed Player URL</label>
-    <input id="movieEmbed" type="url" required
-     placeholder="https://example.com/embed/...">
-   </div>
-
-   <div class="field">
-    <label>Publish Status</label>
-    <select id="movieStatus">
-     <option value="true">Published</option>
-     <option value="false">Unpublished</option>
-    </select>
-   </div>
-
+   <div class="field"><label>Movie Title</label><input id="movieTitle" required placeholder="Enter movie title"></div>
+   <div class="field"><label>Poster Image URL (optional)</label><input id="movieImage" type="url" placeholder="https://example.com/poster.jpg"></div>
+   <div class="field"><label>Or Upload Poster from Gallery</label><input id="movieFile" type="file" accept="image/*"></div>
+   <div class="field"><label>Embed Player URL</label><input id="movieEmbed" type="url" required placeholder="https://example.com/embed/..."></div>
+   <div class="field"><label>Publish Status</label><select id="movieStatus"><option value="true">Published</option><option value="false">Unpublished</option></select></div>
    <button class="btn primary" type="submit" id="saveBtn">Save Movie</button>
    <button class="btn dark" type="button" onclick="resetForm()">Clear</button>
   </form>
-
-  <hr>
-  <h3>Manage Movies</h3>
-  <div id="adminMovieList"></div>
+  <hr><h3>Manage Movies</h3><div id="adminMovieList"></div>
   <button class="btn danger" onclick="logoutAdmin()">Logout</button>
  </div>
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="modal" id="legalModal">
+ <div class="modal-box">
+  <button class="close" onclick="closeModal('legalModal')">×</button>
+  <div class="legal-content" id="legalContent"></div>
+ </div>
+</div>
 
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
 const STORAGE_KEY = "spmovies_embed_catalog_v2";
-
+const WEBSITE_PASSWORD = "jugad";
 let movies = [];
 let selectedMovieId = null;
 let selectedPosterData = "";
 let adminLoggedIn = false;
-
 const $ = id => document.getElementById(id);
 
 function loadMovies(){
@@ -284,341 +190,195 @@ function loadMovies(){
   if(!Array.isArray(movies)) movies = [];
  }catch(e){movies=[]}
 }
-
 function saveMovies(){
- try{
-  localStorage.setItem(STORAGE_KEY,JSON.stringify(movies));
-  return true;
- }catch(e){
-  showToast("Storage full! Please use a smaller poster.");
-  return false;
- }
+ try{localStorage.setItem(STORAGE_KEY,JSON.stringify(movies));return true}
+ catch(e){showToast("Storage full! Please use a smaller poster.");return false}
 }
-
 function showToast(message){
- const t=$("toast");
- t.textContent=message;
- t.style.display="block";
- setTimeout(()=>t.style.display="none",2600);
+ const t=$("toast");t.textContent=message;t.style.display="block";
+ clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>t.style.display="none",2600);
 }
-
 function openModal(id){$(id).classList.add("show")}
 function closeModal(id){$(id).classList.remove("show")}
-
 function escapeHTML(value){
- return String(value ?? "").replace(/[&<>"']/g,c=>({
-  "&":"&amp;","<":"&lt;",">":"&gt;",
-  '"':"&quot;","'":"&#39;"
- })[c]);
+ return String(value ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function validURL(value){
+ try{const u=new URL(value);return u.protocol==="https:"||u.protocol==="http:"}
+ catch(e){return false}
 }
 
-function validURL(value){
- try{
-  const u=new URL(value);
-  return u.protocol==="https:" || u.protocol==="http:";
- }catch(e){return false}
+function unlockWebsite(){
+ const entered=$("sitePassword").value;
+ if(entered===WEBSITE_PASSWORD){
+  sessionStorage.setItem("spmovies_access","yes");
+  $("passwordGate").style.display="none";
+  $("passwordError").textContent="";
+ }else{
+  $("passwordError").textContent="Incorrect password. Please try again.";
+  $("sitePassword").value="";
+ }
+}
+$("passwordForm").addEventListener("submit",function(e){e.preventDefault();unlockWebsite()});
+function checkWebsitePassword(){
+ if(sessionStorage.getItem("spmovies_access")==="yes")$("passwordGate").style.display="none";
+ else $("passwordGate").style.display="flex";
 }
 
 function renderMovies(){
  const grid=$("movieGrid");
  const query=$("search").value.trim().toLowerCase();
-
- const visible=movies.filter(m=>
-  m.published &&
-  (m.title||"").toLowerCase().includes(query)
- );
-
- if(!visible.length){
-  grid.innerHTML='<div class="empty">No movies found.</div>';
-  return;
- }
-
+ const visible=movies.filter(m=>m.published&&(m.title||"").toLowerCase().includes(query));
+ if(!visible.length){grid.innerHTML='<div class="empty">No movies found.</div>';return}
  grid.innerHTML=visible.map(m=>`
-  <article class="movie-card" onclick="openPreview('${m.id}')">
-   <img class="poster"
-    src="${escapeHTML(m.poster)}"
-    alt="${escapeHTML(m.title)}"
-    loading="lazy"
+  <article class="movie-card" onclick="openPreview('${escapeHTML(m.id)}')">
+   <img class="poster" src="${escapeHTML(m.poster)}" alt="${escapeHTML(m.title)}" loading="lazy"
     onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22280%22%3E%3Crect width=%22100%25%22 height=%22100%25%22 fill=%22%23eee%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 fill=%22%23777%22 font-size=%2216%22%3ENo Poster%3C/text%3E%3C/svg%3E'">
    <div class="movie-date">${escapeHTML(m.date||"")}</div>
    <h3 class="movie-title">${escapeHTML(m.title)}</h3>
-  </article>
- `).join("");
+  </article>`).join("");
 }
-
 function openPreview(id){
- const movie=movies.find(m=>m.id===id && m.published);
- if(!movie)return;
-
- selectedMovieId=id;
- $("previewPoster").src=movie.poster;
- $("previewTitle").textContent=movie.title;
- $("previewDate").textContent=movie.date||"";
+ const movie=movies.find(m=>m.id===id&&m.published);if(!movie)return;
+ selectedMovieId=id;$("previewPoster").src=movie.poster;
+ $("previewTitle").textContent=movie.title;$("previewDate").textContent=movie.date||"";
  openModal("previewModal");
 }
-
 function playSelected(){
- const movie=movies.find(m=>m.id===selectedMovieId);
- if(!movie)return;
-
- closeModal("previewModal");
- $("homePage").style.display="none";
- $("watchPage").style.display="block";
- $("watchTitle").textContent=movie.title;
+ const movie=movies.find(m=>m.id===selectedMovieId);if(!movie)return;
+ closeModal("previewModal");$("homePage").style.display="none";
+ $("watchPage").style.display="block";$("watchTitle").textContent=movie.title;
  $("playerFrame").src=movie.embed;
-
- window.history.pushState({watch:movie.id},"",
-  "?watch="+encodeURIComponent(movie.id));
+ history.pushState({watch:movie.id},"","?watch="+encodeURIComponent(movie.id));
  window.scrollTo(0,0);
 }
-
 function goHome(){
- $("playerFrame").src="about:blank";
- $("watchPage").style.display="none";
- $("homePage").style.display="block";
- window.history.pushState({},"",location.pathname);
+ $("playerFrame").src="about:blank";$("watchPage").style.display="none";
+ $("homePage").style.display="block";history.pushState({},"",location.pathname);
  renderMovies();
 }
-
 function openLogin(){
- if(adminLoggedIn){
-  renderAdminList();
-  openModal("adminModal");
- }else{
-  $("loginUser").value="";
-  $("loginPass").value="";
-  $("loginError").textContent="";
-  openModal("loginModal");
- }
+ if(adminLoggedIn){renderAdminList();openModal("adminModal")}
+ else{$("loginUser").value="";$("loginPass").value="";$("loginError").textContent="";openModal("loginModal")}
 }
-
 function loginAdmin(){
- const username=$("loginUser").value;
- const password=$("loginPass").value;
-
- if(username==="@Ad" && password==="@9376"){
-  adminLoggedIn=true;
-  closeModal("loginModal");
-  renderAdminList();
-  openModal("adminModal");
-  showToast("Admin login successful");
- }else{
-  $("loginError").textContent="Incorrect username or password";
- }
+ if($("loginUser").value==="@Ad"&&$("loginPass").value==="@9376"){
+  adminLoggedIn=true;closeModal("loginModal");renderAdminList();openModal("adminModal");showToast("Admin login successful");
+ }else{$("loginError").textContent="Incorrect username or password"}
 }
-
-function closeAdmin(){
- closeModal("adminModal");
- resetForm();
-}
-
-function logoutAdmin(){
- adminLoggedIn=false;
- closeAdmin();
- showToast("Logged out");
-}
-
+function closeAdmin(){closeModal("adminModal");resetForm()}
+function logoutAdmin(){adminLoggedIn=false;closeAdmin();showToast("Logged out")}
 function resetForm(){
- $("movieForm").reset();
- $("editId").value="";
- $("movieFile").value="";
- selectedPosterData="";
- $("saveBtn").textContent="Save Movie";
+ $("movieForm").reset();$("editId").value="";$("movieFile").value="";
+ selectedPosterData="";$("saveBtn").textContent="Save Movie";
 }
-
 function readPosterFile(file){
  return new Promise((resolve,reject)=>{
   if(!file){resolve("");return}
-  if(!file.type.startsWith("image/")){
-   reject(new Error("Please select an image"));
-   return;
-  }
-
+  if(!file.type.startsWith("image/")){reject(new Error("Please select an image"));return}
   const reader=new FileReader();
   reader.onload=()=>{
    const img=new Image();
    img.onload=()=>{
-    const maxWidth=600;
-    const maxHeight=900;
-    let w=img.width,h=img.height;
-    const ratio=Math.min(1,maxWidth/w,maxHeight/h);
-    w=Math.round(w*ratio);
-    h=Math.round(h*ratio);
-
-    const canvas=document.createElement("canvas");
-    canvas.width=w;
-    canvas.height=h;
+    const ratio=Math.min(1,600/img.width,900/img.height);
+    const w=Math.round(img.width*ratio),h=Math.round(img.height*ratio);
+    const canvas=document.createElement("canvas");canvas.width=w;canvas.height=h;
     canvas.getContext("2d").drawImage(img,0,0,w,h);
-    resolve(canvas.toDataURL("image/jpeg",0.78));
+    resolve(canvas.toDataURL("image/jpeg",.78));
    };
-   img.onerror=()=>reject(new Error("Image could not be loaded"));
-   img.src=reader.result;
+   img.onerror=()=>reject(new Error("Image could not be loaded"));img.src=reader.result;
   };
-  reader.onerror=()=>reject(new Error("File could not be read"));
-  reader.readAsDataURL(file);
+  reader.onerror=()=>reject(new Error("File could not be read"));reader.readAsDataURL(file);
  });
 }
-
 $("movieForm").addEventListener("submit",async function(e){
  e.preventDefault();
-
- if(!adminLoggedIn){
-  showToast("Please login first");
-  return;
- }
-
- const title=$("movieTitle").value.trim();
- const imageURL=$("movieImage").value.trim();
- const embed=$("movieEmbed").value.trim();
- const file=$("movieFile").files[0];
- const editId=$("editId").value;
-
+ if(!adminLoggedIn){showToast("Please login first");return}
+ const title=$("movieTitle").value.trim(),imageURL=$("movieImage").value.trim();
+ const embed=$("movieEmbed").value.trim(),file=$("movieFile").files[0],editId=$("editId").value;
  if(!title){showToast("Enter movie title");return}
  if(!validURL(embed)){showToast("Enter a valid embed URL");return}
- if(imageURL && !validURL(imageURL)){
-  showToast("Enter a valid poster URL");
-  return;
- }
-
+ if(imageURL&&!validURL(imageURL)){showToast("Enter a valid poster URL");return}
  const existing=movies.find(m=>m.id===editId);
- let poster=selectedPosterData || (existing?existing.poster:"");
-
- if(file){
-  try{
-   poster=await readPosterFile(file);
-  }catch(err){
-   showToast(err.message);
-   return;
-  }
- }else if(imageURL){
-  poster=imageURL;
- }
-
- if(!poster){
-  showToast("Please add a poster image");
-  return;
- }
-
+ let poster=selectedPosterData||(existing?existing.poster:"");
+ if(file){try{poster=await readPosterFile(file)}catch(err){showToast(err.message);return}}
+ else if(imageURL)poster=imageURL;
+ if(!poster){showToast("Please add a poster image");return}
  const movie={
-  id:editId || ("sp_"+Date.now()+"_"+Math.random().toString(36).slice(2,7)),
-  title,
-  poster,
-  embed,
-  published:$("movieStatus").value==="true",
-  date:existing?existing.date:new Date().toLocaleDateString("en-US",{
-   month:"short",day:"numeric",year:"numeric"
-  }).toUpperCase()
+  id:editId||("sp_"+Date.now()+"_"+Math.random().toString(36).slice(2,7)),
+  title,poster,embed,published:$("movieStatus").value==="true",
+  date:existing?existing.date:new Date().toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}).toUpperCase()
  };
-
- if(editId){
-  const index=movies.findIndex(m=>m.id===editId);
-  if(index!==-1)movies[index]=movie;
- }else{
-  movies.unshift(movie);
- }
-
+ if(editId){const index=movies.findIndex(m=>m.id===editId);if(index!==-1)movies[index]=movie}
+ else movies.unshift(movie);
  if(!saveMovies())return;
-
- resetForm();
- renderMovies();
- renderAdminList();
- showToast(editId?"Movie updated":"Movie saved");
+ resetForm();renderMovies();renderAdminList();showToast(editId?"Movie updated":"Movie saved");
 });
-
 function renderAdminList(){
  if(!adminLoggedIn)return;
-
  const list=$("adminMovieList");
- if(!movies.length){
-  list.innerHTML="<p>No movies added yet.</p>";
-  return;
- }
-
+ if(!movies.length){list.innerHTML="<p>No movies added yet.</p>";return}
  list.innerHTML=movies.map(m=>`
   <div class="admin-list-item">
    <img src="${escapeHTML(m.poster)}" alt="">
-   <div class="info">
-    <strong>${escapeHTML(m.title)}</strong>
-    <div class="status ${m.published?"":"off"}">
-     ${m.published?"Published":"Unpublished"}
-    </div>
-    <button class="btn primary" onclick="editMovie('${m.id}')">Edit</button>
-    <button class="btn dark" onclick="togglePublish('${m.id}')">
-     ${m.published?"Unpublish":"Publish"}
-    </button>
-    <button class="btn danger" onclick="deleteMovie('${m.id}')">Delete</button>
+   <div class="info"><strong>${escapeHTML(m.title)}</strong>
+    <div class="status ${m.published?"":"off"}">${m.published?"Published":"Unpublished"}</div>
+    <button class="btn primary" onclick="editMovie('${escapeHTML(m.id)}')">Edit</button>
+    <button class="btn dark" onclick="togglePublish('${escapeHTML(m.id)}')">${m.published?"Unpublish":"Publish"}</button>
+    <button class="btn danger" onclick="deleteMovie('${escapeHTML(m.id)}')">Delete</button>
    </div>
-  </div>
- `).join("");
+  </div>`).join("");
 }
-
 function editMovie(id){
- if(!adminLoggedIn)return;
- const m=movies.find(x=>x.id===id);
- if(!m)return;
-
- $("editId").value=m.id;
- $("movieTitle").value=m.title;
- $("movieImage").value="";
- $("movieEmbed").value=m.embed;
- $("movieStatus").value=String(m.published);
- $("movieFile").value="";
- selectedPosterData=m.poster;
- $("saveBtn").textContent="Update Movie";
-
+ if(!adminLoggedIn)return;const m=movies.find(x=>x.id===id);if(!m)return;
+ $("editId").value=m.id;$("movieTitle").value=m.title;$("movieImage").value="";
+ $("movieEmbed").value=m.embed;$("movieStatus").value=String(m.published);
+ $("movieFile").value="";selectedPosterData=m.poster;$("saveBtn").textContent="Update Movie";
  $("movieTitle").scrollIntoView({behavior:"smooth",block:"center"});
 }
-
 function togglePublish(id){
- if(!adminLoggedIn)return;
- const m=movies.find(x=>x.id===id);
- if(!m)return;
-
+ if(!adminLoggedIn)return;const m=movies.find(x=>x.id===id);if(!m)return;
  m.published=!m.published;
- if(saveMovies()){
-  renderMovies();
-  renderAdminList();
-  showToast(m.published?"Movie published":"Movie unpublished");
- }
+ if(saveMovies()){renderMovies();renderAdminList();showToast(m.published?"Movie published":"Movie unpublished")}
 }
-
 function deleteMovie(id){
- if(!adminLoggedIn)return;
- const m=movies.find(x=>x.id===id);
- if(!m)return;
-
+ if(!adminLoggedIn)return;const m=movies.find(x=>x.id===id);if(!m)return;
  if(!confirm("Delete "+m.title+"?"))return;
  movies=movies.filter(x=>x.id!==id);
-
- if(saveMovies()){
-  renderMovies();
-  renderAdminList();
-  showToast("Movie deleted");
- }
+ if(saveMovies()){renderMovies();renderAdminList();showToast("Movie deleted")}
 }
 
-// Open a movie directly using ?watch=MOVIE_ID
-function checkWatchLink(){
- const params=new URLSearchParams(location.search);
- const id=params.get("watch");
- if(!id)return;
-
- const movie=movies.find(m=>m.id===id && m.published);
- if(!movie)return;
-
- selectedMovieId=id;
- $("homePage").style.display="none";
- $("watchPage").style.display="block";
- $("watchTitle").textContent=movie.title;
- $("playerFrame").src=movie.embed;
+const legalPages={
+ about:`<h2>About SP Movies</h2><p>SP Movies is a movie catalogue website designed to help visitors browse movie listings and access movie-related information.</p><p>Website features and listings may change over time. SP Movies does not claim ownership of third-party material unless expressly stated.</p>`,
+ contact:`<h2>Contact Us</h2><p>For general questions, technical issues, copyright concerns or other enquiries, contact the website administrator.</p><p><strong>Contact email:</strong> [Add your working contact email here]</p><p>Replace this placeholder with an email address that you actively monitor before publishing the website.</p>`,
+ disclaimer:`<h2>Disclaimer</h2><p>Information on SP Movies is provided for general informational and catalogue purposes. Movie titles, descriptions, artwork, ratings and other details may be supplied by third-party sources.</p><p>SP Movies does not represent that it owns or licenses third-party films, artwork or other copyrighted material unless specifically stated.</p><p>External links and embedded players may be hosted and controlled by third parties. We do not control their content, availability, security or privacy practices.</p><p>Visitors are responsible for ensuring that their access to and use of external content complies with applicable laws and the terms of the relevant services.</p><p>If you believe material accessible through this website infringes your rights, please contact us with the relevant URL and supporting information.</p>`,
+ privacy:`<h2>Privacy Policy</h2><p>This website may store limited information in your browser, including a temporary website access session and locally stored catalogue data.</p><p>The current standalone version does not include a visitor account system or a server-side visitor database. If analytics, advertising, cookies or other third-party services are added later, this policy should be updated to describe them accurately.</p><p>Third-party websites and embedded players may collect information under their own privacy policies. Please review those policies before using external services.</p><p>Contact: [Add your working contact email here]</p>`,
+ terms:`<h2>Terms &amp; Conditions</h2><p>By using SP Movies, you agree to use the website lawfully and responsibly.</p><ul><li>Do not use the website for unlawful activity.</li><li>Do not attempt to disrupt, damage or gain unauthorised access to the website.</li><li>External links and embedded players are third-party services and may have separate terms.</li><li>Website information and features may change or be removed.</li></ul><p>You are responsible for complying with applicable laws when accessing external content.</p>`,
+ dmca:`<h2>DMCA / Copyright Policy</h2><p>SP Movies respects intellectual property rights and will review properly submitted copyright complaints.</p><p>If you are a copyright owner or authorised representative and believe content accessible through this website infringes your rights, please send a notice containing:</p><ul><li>Your name and contact information.</li><li>Identification of the copyrighted work.</li><li>The exact URL of the allegedly infringing material.</li><li>A statement explaining your ownership or authority to act.</li><li>A statement that the information in your notice is accurate.</li></ul><p>Send notices to: [Add your working contact email here]</p><p>We will review complete notices and take appropriate action where warranted. Do not submit false or misleading claims.</p>`
+};
+function openLegal(page){
+ const content=legalPages[page];if(!content)return;
+ $("legalContent").innerHTML=content;openModal("legalModal");
 }
 
 $("year").textContent=new Date().getFullYear();
-
 loadMovies();
 renderMovies();
-checkWatchLink();
-</script>
+checkWebsitePassword();
 
+/* Handle browser back/forward for movie watch links */
+window.addEventListener("popstate",function(){
+ const id=new URLSearchParams(location.search).get("watch");
+ if(id){
+  const movie=movies.find(m=>m.id===id&&m.published);
+  if(movie){
+   $("homePage").style.display="none";$("watchPage").style.display="block";
+   $("watchTitle").textContent=movie.title;$("playerFrame").src=movie.embed;return;
+  }
+ }
+ $("playerFrame").src="about:blank";$("watchPage").style.display="none";$("homePage").style.display="block";
+});
+</script>
 </body>
 </html>
+
